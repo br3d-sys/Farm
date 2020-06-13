@@ -1,0 +1,125 @@
+﻿
+@{
+    ViewBag.Title = "Registrar_Categoria";
+    Layout = "~/Views/Main.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Registrar Categoria</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Registrar Categoria</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Registrar</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+
+            @if (ViewBag.message != null)
+            {
+                <div class="alert alert-dark" role="alert">
+                    @ViewBag.message
+                </div>
+            }
+
+
+
+            <form name="registrar" method="post" @*action="/Categoria/Registrar_Categoria"*@ enctype="multipart/form-data" id="registrar">
+
+                <div class="form-row">
+                    <div class="form-group col-sm-6">
+                        <label for="nombre">Nombre</label>
+                        <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese su Nombre">
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="descripcion">Descripcion</label>
+                        <input class="form-control" type="text" name="descripcion" id="descripcion" placeholder="Ingrese su Descripción">
+                    </div>
+                </div>
+                
+                    <div class="form-group col-auto">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                  
+            </form>
+
+
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            Paginación
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function (e) {
+
+        document.getElementById("registrar").addEventListener("submit", function (e) {
+
+            var url = "@Url.Action("Registrar_Categoria", "Categoria")"/*"/Producto/Registrar_Producto"*/;
+
+            //var form = document.getElementById("registrar");
+            var nombre = document.getElementById("nombre").value;
+            var descripcion = document.getElementById("descripcion").value;
+            //var formdata = new FormData();
+
+            var param = "nombre=" + nombre + "&descripcion=" + descripcion;
+            var ajax = new XMLHttpRequest();
+
+            ajax.onreadystatechange = function () {
+                if (ajax.readyState == 4) {
+
+                    //console.log(JSON.parse(ajax.responseText));
+
+                    var response = JSON.parse(ajax.responseText);
+                    if (response.success) {
+                        console.log(response.message);
+                    }
+                }
+            }
+
+            ajax.open("POST", url, true);
+            ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            //console.log(formdata.toString);
+            ajax.send(param);
+
+            e.preventDefault();
+        })
+
+
+
+
+
+
+    })
+
+
+</script>
+

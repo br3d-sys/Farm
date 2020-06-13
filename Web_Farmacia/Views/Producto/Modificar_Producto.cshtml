@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "Modificar_Producto";
+    Layout = "~/Views/Main.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Modificar Productos</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Modificar Productos</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Modificar</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+
+            @if (ViewBag.message != null)
+            {
+                <div class="alert alert-dark" role="alert">
+                    @ViewBag.message
+                </div>
+            }
+
+            @model Web_Farmacia.Controllers.Info
+
+            
+
+                <form method="post" action="/Producto/Modificar_Producto" enctype="multipart/form-data">
+
+                    <div class="form-row">
+
+
+                        <input class="form-control" type="hidden" name="id" id="id" value="@Model.Obj_prod.Id_producto">
+
+                        <div class="form-group col-sm-6">
+                            <label for="nombre">Nombre</label>
+                            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese su Nombre" value="@Model.Obj_prod.Nombre">
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label for="categoria">Categoria</label>
+                            <select class="form-control" name="categoria" id="categoria" value="@Model.Obj_prod.Id_categoria">
+                                @foreach (var categoria in Model.Cat)
+                                {
+                                    <option value="@categoria.Id_categoria">@categoria.Nombre</option>
+                                }
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-4">
+                            <label for="precio">Precio</label>
+                            <input class="form-control" type="text" name="precio" id="precio" placeholder="S/. 0.00" value="@Model.Obj_prod.Precio" />
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="stock">Stock</label>
+                            <input class="form-control" type="text" name="stock" id="stock" placeholder="Ingrese la Cantidad" value="@Model.Obj_prod.Stock">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="codigo">Codigo</label>
+                            <input class="form-control" type="text" name="codigo" id="codigo" placeholder="Ingrese su Codigo" value="@Model.Obj_prod.Codigo">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-8">
+                            <label for="descripcion">Descripcion</label>
+                            <input class="form-control" type="text" name="descripcion" id="descripcion" placeholder="Ingrese su Descripción" value="@Model.Obj_prod.Descripcion">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="imagen">Imagen</label>
+                            <input class="form-control" type="file" name="imagen" id="imagen" placeholder="Seleccione su Imagen">
+                        </div>
+                    </div>
+                    <div class="form-row d-flex justify-content-between">
+                        <div class="form-group col-auto">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <img id="img-up" src="~/Content/Imagenes/@Model.Obj_prod.Imagen" alt="" class="img-thumbnail">
+                        </div>
+                    </div>
+                    
+
+                </form>
+
+
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            Paginación
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->
+
+<script>
+    function readFile(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var filePreview = document.createElement('img');
+                filePreview.id = 'file-preview';
+                filePreview.src = e.target.result;
+                //console.log(e.target.result);
+
+                var previewZone = document.getElementById('img-up');
+                previewZone.src=filePreview.src;
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    var fileUpload = document.getElementById('imagen');
+    fileUpload.onchange = function (e) {
+        readFile(e.srcElement);
+    }
+
+</script>

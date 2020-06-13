@@ -1,0 +1,146 @@
+﻿
+@{
+    ViewBag.Title = "Consultar_Producto";
+    Layout = "~/Views/Main.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Lista de Productos</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Listar Productos</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Productos</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+
+
+            @model Web_Farmacia.Controllers.Info
+
+
+            <form action="/Producto/Consultar_Producto" method="post" class="">
+
+                <div class="form-row">
+                    <div class="form-group col-sm-6">
+                        <label for="nombre">Nombre</label>
+                        <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese su Nombre">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="categoria">Categoria</label>
+                        <select class="form-control" name="categoria" id="categoria">
+
+                            <option value="%" selected="selected">[Todos]</option>
+
+                            @foreach (var categoria in Model.Cat)
+                            {
+                                <option value="@categoria.Id_categoria">@categoria.Nombre</option>
+                            }
+                        </select>
+
+                    </div>
+                    <div class="col-sm-2 align-self-center align-self-end text-center">
+                        <button type="submit" class="btn btn-primary pr-4 pl-4">Buscar</button>
+                    </div>
+
+                </div>
+                
+                    
+                
+            </form>
+
+          
+            
+            
+
+            <!-- Table row -->
+
+            @if (ViewBag.eliminar != null)
+            {
+                <div class="alert alert-dark" role="alert">
+                    @ViewBag.eliminar
+                </div>
+            }
+
+            @if (ViewBag.modificar != null)
+            {
+                <div class="alert alert-dark" role="alert">
+                    @ViewBag.modificar
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-12 table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Categoria</th>
+                                <th>Stock</th>
+                                <th>Description</th>
+                                <th>Precio</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var producto in Model.Prod)
+                                {
+                                    <tr>
+                                        <td>@producto.Nombre</td>
+                                        <td>@producto.Nom_categoria</td>
+                                        <td>@producto.Stock</td>
+                                        <td>@producto.Descripcion</td>
+                                        <td>@producto.Precio</td>
+                                        <td class="text-center">
+                                            <a href="/Producto/Modificar_Producto?id=@producto.Id_producto" class="btn btn-primary" id="actualizar"><i class="fa fa-edit"></i></a>
+                                            <a href="/Producto/eliminar?id=@producto.Id_producto" class="btn btn-danger" id="Eliminar"><i class="fa fa-trash"></i></a>
+                                        
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.col -->
+            </div>
+
+
+
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            Paginación
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->
+
+

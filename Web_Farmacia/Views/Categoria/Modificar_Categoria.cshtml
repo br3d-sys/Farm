@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewBag.Title = "Modificar_Categoria";
+    Layout = "~/Views/Main.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Modificar Categoria</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Modificar Categoria</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Modificar</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+
+            @model Web_Farmacia.Clases.Categoria
+
+
+
+            <form method="post" action="/Categoria/Modificar_Categoria" enctype="multipart/form-data">
+
+                <div class="form-row">
+
+
+                    <input class="form-control" type="hidden" name="id" id="id" value="@Model.Id_categoria">
+
+                    <div class="form-group col-sm-6">
+                        <label for="nombre">Nombre</label>
+                        <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese su Nombre" value="@Model.Nombre">
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="descripcion">Descripcion</label>
+                        <input class="form-control" type="text" name="descripcion" id="descripcion" placeholder="Ingrese su Descripción" value="@Model.Descripcion">
+                    </div>
+                </div>
+                
+                
+                    <div class="form-group col-auto">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                    
+                
+
+
+            </form>
+
+
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            Paginación
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->
+
