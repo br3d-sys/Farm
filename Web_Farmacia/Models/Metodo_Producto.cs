@@ -25,8 +25,10 @@ namespace Web_Farmacia.Models
                     using (cmd = new MySqlCommand())
                     {
                         cmd.CommandText = "SP_C_Tabla_Producto";
-                        //cmd.CommandText = string.Format("insert into tbl_producto(nombre,id_categoria,stock,descripcion,codigo,precio,imagen)" +
-                        //    "values('{0}',{1},{2},'{3}','{4}','{5}','{6}')", pro.Nombre, pro.Id_categoria, pro.Stock, pro.Descripcion, pro.Codigo, pro.Precio, pro.Imagen);
+                        //cmd.CommandText = string.Format("insert into tbl_producto(nombre,id_categoria,
+                        //stock,descripcion,codigo,precio,imagen)" +
+                        //    "values('{0}',{1},{2},'{3}','{4}','{5}','{6}')", pro.Nombre, pro.Id_categoria, 
+                        //pro.Stock, pro.Descripcion, pro.Codigo, pro.Precio, pro.Imagen);
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Connection = con;
 
@@ -46,17 +48,13 @@ namespace Web_Farmacia.Models
                         {
                             return false;
                         }
-
                     }
-
                 }
             }
             catch (Exception ex)
             {
                 return false;
-                throw;
             }
-
         }
 
         public List<Producto> listar()
@@ -71,7 +69,11 @@ namespace Web_Farmacia.Models
                     using (cmd = new MySqlCommand())
                     {
                         cmd.CommandText = "SP_A_Tabla_Producto";
-                        //cmd.CommandText = "Select tbl_producto.id_producto, tbl_producto.nombre, tbl_producto.id_categoria, tbl_categoria.nombre AS 'categoria', tbl_producto.stock, tbl_producto.descripcion, tbl_producto.codigo, tbl_producto.precio, tbl_producto.imagen from tbl_producto INNER JOIN tbl_categoria ON tbl_producto.id_categoria = tbl_categoria.id_categoria";
+                        //cmd.CommandText = "Select tbl_producto.id_producto, tbl_producto.nombre, 
+                        //tbl_producto.id_categoria, tbl_categoria.nombre AS 'categoria', tbl_producto.stock, 
+                        //tbl_producto.descripcion, tbl_producto.codigo, tbl_producto.precio, 
+                        //tbl_producto.imagen from tbl_producto INNER JOIN tbl_categoria 
+                        //ON tbl_producto.id_categoria = tbl_categoria.id_categoria";
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Connection = con;
 
@@ -103,7 +105,6 @@ namespace Web_Farmacia.Models
             catch (Exception)
             {
                 return null;
-                
             }
             
         }
@@ -193,7 +194,7 @@ namespace Web_Farmacia.Models
             
         }
 
-        public Producto obtener(int id)
+        public Producto obtener(int ? id)
         {
             try
             {

@@ -8,7 +8,7 @@ namespace Web_Farmacia.Clases
     public class Categoria
     {
 
-        private int id_categoria;
+        private int ? id_categoria;
         private string nombre;
         private string descripcion;
 
@@ -17,7 +17,7 @@ namespace Web_Farmacia.Clases
 
         }
 
-        public int Id_categoria
+        public int ? Id_categoria
         {
             get
             {

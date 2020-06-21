@@ -48,14 +48,20 @@
 
             <form name="registrar" method="post" @*action="/Categoria/Registrar_Categoria"*@ enctype="multipart/form-data" id="registrar">
 
+                <div class="d-flex">
+                    <a href="@Url.Action("Consultar_Categoria", "Categoria")" class="btn btn-secondary ml-auto" @*id="return"*@><i class="fa fa-caret-left"></i> Lista de Categorias</a>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group col-sm-6">
                         <label for="nombre">Nombre</label>
                         <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese su Nombre">
+                        <span class="badge badge-warning sp" id="sp_nombre"></span>
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="descripcion">Descripcion</label>
                         <input class="form-control" type="text" name="descripcion" id="descripcion" placeholder="Ingrese su Descripción">
+                        <span class="badge badge-warning sp" id="sp_descripcion"></span>
                     </div>
                 </div>
                 
@@ -77,6 +83,22 @@
     <!-- /.card -->
 </section>
 <!-- /.content -->
+<div class="modal fade" id="mod" role="dialog">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Información</h4>
+            </div>
+            <div class="modal-body">
+                <p id="content"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="mod-acept"> Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function (e) {
@@ -88,9 +110,13 @@
             //var form = document.getElementById("registrar");
             var nombre = document.getElementById("nombre").value;
             var descripcion = document.getElementById("descripcion").value;
-            //var formdata = new FormData();
 
-            var param = "nombre=" + nombre + "&descripcion=" + descripcion;
+            var formdata = new FormData();
+
+            formdata.append("nombre", nombre);
+            formdata.append("descripcion", descripcion);
+
+            //var param = "nombre=" + nombre + "&descripcion=" + descripcion;
             var ajax = new XMLHttpRequest();
 
             ajax.onreadystatechange = function () {
@@ -101,24 +127,48 @@
                     var response = JSON.parse(ajax.responseText);
                     if (response.success) {
                         console.log(response.message);
+                        
+                        document.getElementById("content").innerHTML = response.message;
+                        $("#mod").modal({ backdrop: true });
+                        limpiar_spam();
+                    } else {
+                        console.log(response);
+                        limpiar_spam();
+                        for (var prop in response.datos) {
+                            //console.log("propiedad " + prop + " valor " + response.datos[prop]);
+                            document.getElementById(prop).innerHTML = response.datos[prop]
+                        }
                     }
                 }
             }
 
             ajax.open("POST", url, true);
-            ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            //ajax.setRequestHeader("Content-Type", "multipart/byteranges");
             //console.log(formdata.toString);
-            ajax.send(param);
+            ajax.send(formdata/*param*/);
 
             e.preventDefault();
         })
 
+        //--------------------------------------------
 
+        document.getElementById("mod-acept").addEventListener("click", function () {
+            $("#mod").modal("hide");
 
+            document.getElementById("nombre").value = "";
+            document.getElementById("descripcion").value = "";
+            
+        })
 
-
-
+        function limpiar_spam() {
+            var elementos = document.getElementsByClassName("sp");
+            for (i = 0; i < elementos.length ; i++) {
+                elementos.item(i).innerHTML = "";
+            }
+        }
     })
+
+
 
 
 </script>

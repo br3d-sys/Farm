@@ -40,6 +40,10 @@
 
             @model Web_Farmacia.Controllers.Info
 
+            <div class="d-flex mb-4">
+                <a href="@Url.Action("Registrar_Producto", "Producto")" class="btn btn-secondary ml-auto"><i class="fa fa-plus"></i> Agregar</a>
+            </div>
+
 
             <form action="/Producto/Consultar_Producto" method="post" class="">
 
@@ -116,7 +120,7 @@
                                         <td>@producto.Precio</td>
                                         <td class="text-center">
                                             <a href="/Producto/Modificar_Producto?id=@producto.Id_producto" class="btn btn-primary" id="actualizar"><i class="fa fa-edit"></i></a>
-                                            <a href="/Producto/eliminar?id=@producto.Id_producto" class="btn btn-danger" id="Eliminar"><i class="fa fa-trash"></i></a>
+                                            <button onclick="eliminar('@producto.Id_producto')" class="btn btn-danger" id="Eliminar"><i class="fa fa-trash"></i></button>
                                         
                                         </td>
                                     </tr>
@@ -142,5 +146,56 @@
     <!-- /.card -->
 </section>
 <!-- /.content -->
+<div class="modal fade" id="mod" role="dialog">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Información</h4>
+            </div>
+            <div class="modal-body">
+                <p id="content">Desea eliminar el Producto?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="mod-acept"> Eliminar</button><button class="btn btn-secondary" id="mod-can">Cancelar</button>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<script>
+
+    var f_id;
+
+    document.addEventListener("DOMContentLoaded", function (e) {
+
+
+
+        document.getElementById("mod-acept").addEventListener("click", function () {
+            location.replace("/Producto/eliminar?id=" + f_id);
+            $("#mod").modal("hide");
+        })
+        document.getElementById("mod-can").addEventListener("click", function () {
+            $("#mod").modal("hide");
+        })
+
+        function limpiar_spam() {
+            var elementos = document.getElementsByClassName("sp");
+            for (i = 0; i < elementos.length ; i++) {
+                elementos.item(i).innerHTML = "";
+            }
+        }
+    })
+
+    function eliminar(id) {
+        $("#mod").modal({ backdrop: true });
+        f_id = id;
+    }
+
+
+</script>
 
 

@@ -83,76 +83,119 @@ namespace Web_Farmacia.Controllers
             return RedirectToAction("Consultar_Producto");
         }
 
-        public ActionResult Modificar_Producto(int id)
+        public ActionResult Modificar_Producto(int ? id)
         {
             
             Metodo_Producto mp = new Metodo_Producto();
             Metodo_Categoria mc = new Metodo_Categoria();
             List<Categoria> cat = new List<Categoria>();
 
-            cat = mc.listar();
-            pro = mp.obtener(id);
+            if (id != null)
+            {
+                cat = mc.listar();
+                pro = mp.obtener(id);
 
-            Info datos = new Info();
-            datos.Cat = cat;
-            datos.Obj_prod = pro;
+                Info datos = new Info();
+                datos.Cat = cat;
+                datos.Obj_prod = pro;
 
-            return View(datos);
+                return View(datos);
+            }
+            else
+            {
+                return RedirectToAction("Consultar_Producto");
+            }
+           
+
+
         }
         [HttpPost]
-        public ActionResult Modificar_Producto(int id, string nombre, int ? categoria, Double ? precio, int ? stock, string codigo, string descripcion, HttpPostedFileBase imagen)
+        public ActionResult Modificar_Producto(int ? id, string nombre, int ? categoria, Double ? precio, int ? stock, string codigo, string descripcion, HttpPostedFileBase imagen)
         {
             Metodo_Producto mp = new Metodo_Producto();
             Producto pro = new Producto();
-            string subir;
+            string message, subir;
+            SortedList<string, string> error = new SortedList<string, string>();
 
-            //if(!String.IsNullOrEmpty(nombre) & categoria != null & precio != null & stock != null & !String.IsNullOrEmpty(codigo) & !String.IsNullOrEmpty(descripcion))
-            //{
-                pro.Id_producto = id;
-                pro.Nombre = nombre;
-                pro.Id_categoria = categoria;
-                pro.Precio = precio;
-                pro.Stock = stock;
-                pro.Codigo = codigo;
-                pro.Descripcion = descripcion;
-                pro.Imagen = null;
-
-                if(imagen != null)
+            if (id != null)
+            {
+                if (String.IsNullOrEmpty(nombre))
                 {
-                    pro.Imagen = imagen.FileName;
-                    subir = Server.MapPath("~/Content/Imagenes/");
-                    subir += imagen.FileName;
+                    error.Add("sp_nombre", "Ingrese el nombre del Producto");
+                }
+                if (categoria == null)
+                {
+                    error.Add("sp_categoria", "Seleccione la Categoria para el Producto");
+                }
+                if (precio == null)
+                {
+                    error.Add("sp_precio", "Ingrese el Precio del Producto");
+                }
+                if (stock == null)
+                {
+                    error.Add("sp_stock", "Ingrese el Stock del Producto");
+                }
+                if (String.IsNullOrEmpty(codigo))
+                {
+                    error.Add("sp_codigo", "Ingrese el Codigo del Producto");
+                }
+                if (String.IsNullOrEmpty(descripcion))
+                {
+                    error.Add("sp_descripcion", "Ingrese la Descripción del Producto");
+                }
 
-                    if (mp.subirArchivo(subir, imagen))
+                //if(!String.IsNullOrEmpty(nombre) & categoria != null & precio != null & stock != null & !String.IsNullOrEmpty(codigo) & !String.IsNullOrEmpty(descripcion))
+                //{
+                if (error.Count == 0)
+                {
+                    pro.Id_producto = id;
+                    pro.Nombre = nombre;
+                    pro.Id_categoria = categoria;
+                    pro.Precio = precio;
+                    pro.Stock = stock;
+                    pro.Codigo = codigo;
+                    pro.Descripcion = descripcion;
+                    pro.Imagen = null;
+
+                    if (imagen != null)
                     {
-                        TempData["Img"] = "Se guardó la imagen";
+                        pro.Imagen = imagen.FileName;
+                        subir = Server.MapPath("~/Content/Imagenes/");
+                        subir += imagen.FileName;
+
+                        if (mp.subirArchivo(subir, imagen))
+                        {
+                            String img = "Se guardó la imagen";
+                        }
+                        else
+                        {
+                            String img = "No se Guardó la imagen";
+                        }
+                    }
+
+                    if (mp.actualizar(pro))
+                    {
+                        message = "Se actualizaron los datos correctamente";
                     }
                     else
                     {
-                        TempData["Img"] = "No se Guardó la imagen";
+                        message = "No se logró actualizar lo datos";
                     }
 
-                }
-
-                if (mp.actualizar(pro))
-                {
-                    TempData["Modificar"] = "Se actualizaron los datos correctamente";
+                    return Json(new { message = message, success = true });
                 }
                 else
                 {
-                    TempData["Modificar"] = "No se pudo actualizar los datos";
+                    message = "Ingrese los datos necesarios";
+                    return Json(new { message = message, success = false, datos = error });
                 }
 
-                return RedirectToAction("Consultar_Producto");
-            //}
-            //else
-            //{
-            //    ViewBag.message = "Ingrese los datos necesarios";
-            //    //retornar datos anteriores con la misma vista
-            //    return RedirectToAction("Modificar_Producto";
-            //}
+                
+                //--------------------------------------------------------------
 
-            
+            }
+
+            return RedirectToAction("Consultar_Producto");
         }
 
         public ActionResult Registrar_Producto()
@@ -172,14 +215,38 @@ namespace Web_Farmacia.Controllers
                 Metodo_Producto mp = new Metodo_Producto();
                 Metodo_Categoria mc = new Metodo_Categoria();
                 List<Categoria> cat = new List<Categoria>();
+                string message,subir;
+                SortedList<string, string> error = new SortedList<string, string>();
 
-                string subir;
-                cat = mc.listar();
-
-            if(!String.IsNullOrEmpty(nombre) & categoria != null & precio != null & stock != null & !String.IsNullOrEmpty(codigo) & !String.IsNullOrEmpty(descripcion))
+            if (String.IsNullOrEmpty(nombre))
             {
-                
+                error.Add("sp_nombre", "Ingrese el nombre del Producto");
+            }
+            if (categoria == null)
+            {
+                error.Add("sp_categoria", "Seleccione la Categoria para el Producto");
+            }
+            if (precio == null)
+            {
+                error.Add("sp_precio", "Ingrese el Precio del Producto");
+            }
+            if (stock == null)
+            {
+                error.Add("sp_stock", "Ingrese el Stock del Producto");
+            }
+            if (String.IsNullOrEmpty(codigo))
+            {
+                error.Add("sp_codigo", "Ingrese el Codigo del Producto");
+            }
+            if (String.IsNullOrEmpty(descripcion))
+            {
+                error.Add("sp_descripcion", "Ingrese la Descripción del Producto");
+            }
 
+            //cat = mc.listar();
+
+            if (error.Count == 0)
+            {
                 pro.Nombre = nombre;
                 pro.Id_categoria = categoria;
                 pro.Precio = precio;
@@ -191,23 +258,21 @@ namespace Web_Farmacia.Controllers
                 subir= Server.MapPath("~/Content/Imagenes/");
                 subir += imagen.FileName;
 
-                
-            
                 if (mp.guardar(pro) && mp.subirArchivo(subir, imagen))
                 {
-                    ViewBag.message = "Se guardaron los datos correctamente";
+                    message = "Se guardaron los datos correctamente";
                 }
                 else
                 {
-                    ViewBag.message = "No se Guardaron lo datos";
+                    message = "No se Guardaron lo datos";
                 }
 
-                return Json(new {message = ViewBag.message, success = true });
+                return Json(new {message = message, success = true});
             }
             else
             {
-                ViewBag.message = "Ingrese los datos necesarios";
-                return Json(new { message = ViewBag.message, success = true });
+                message = "Ingrese los datos necesarios";
+                return Json(new {message = message, success = false, datos = error });
             }
 
            

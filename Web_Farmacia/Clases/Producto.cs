@@ -8,7 +8,7 @@ namespace Web_Farmacia.Clases
     public class Producto
     {
 
-        private int id_producto;
+        private int ? id_producto;
         private string nombre;
         private int ? id_categoria;
         private string nom_categoria;
@@ -21,7 +21,7 @@ namespace Web_Farmacia.Clases
         {
 
         }
-        public int Id_producto
+        public int ? Id_producto
         {
             get
             {

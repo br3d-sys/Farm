@@ -46,12 +46,17 @@
 
             @model List<Web_Farmacia.Clases.Categoria>
 
-            <form method="post" @*action="/Producto/Registrar_Producto"*@ enctype="multipart/form-data" id="Registrar">
+            <form method="post" @*action="/Producto/Registrar_Producto"*@ enctype="multipart/form-data" id="registrar">
+
+                <div class="d-flex mb-4">
+                    <a href="@Url.Action("Consultar_Producto", "Producto")" class="btn btn-secondary ml-auto"><i class="fa fa-caret-left"></i> Lista de Productos</a>
+                </div>
 
                 <div class="form-row">
                     <div class="form-group col-sm-6">
                         <label for="nombre">Nombre</label>
-                        <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese su Nombre" required>
+                        <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese su Nombre" >
+                        <span class="badge badge-warning sp" id="sp_nombre"></span>
                     </div>
                     <div class="form-group col-sm-6">
                         <label for="categoria">Categoria</label>
@@ -60,33 +65,38 @@
                             {
                                 <option value="@categoria.Id_categoria">@categoria.Nombre</option>
                             }
-                            
                         </select>
+                        <span class="badge badge-warning sp" id="sp_categoria"></span>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-sm-4">
                         <label for="precio">Precio</label>
                         @*Validar que solo se acepten puntos en el campo*@
-                        <input class="form-control" type="text" name="precio" id="precio" placeholder="S/. 0.00" required/>
+                        <input class="form-control" type="text" name="precio" id="precio" placeholder="S/. 0.00" />
+                        <span class="badge badge-warning sp" id="sp_precio"></span>
                     </div>
                     <div class="form-group col-sm-4">
                         <label for="stock">Stock</label>
-                        <input class="form-control" type="number" name="stock" id="stock" placeholder="Ingrese la Cantidad" required>
+                        <input class="form-control" type="number" name="stock" id="stock" placeholder="Ingrese la Cantidad" >
+                        <span class="badge badge-warning sp" id="sp_stock"></span>
                     </div>
                     <div class="form-group col-sm-4">
                         <label for="codigo">Codigo</label>
-                        <input class="form-control" type="text" name="codigo" id="codigo" placeholder="Ingrese su Codigo" required>
+                        <input class="form-control" type="text" name="codigo" id="codigo" placeholder="Ingrese su Codigo" >
+                        <span class="badge badge-warning sp" id="sp_codigo"></span>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-sm-8">
                         <label for="descripcion">Descripcion</label>
-                        <input class="form-control" type="text" name="descripcion" id="descripcion" placeholder="Ingrese su Descripción" required>
+                        <input class="form-control" type="text" name="descripcion" id="descripcion" placeholder="Ingrese su Descripción" >
+                        <span class="badge badge-warning sp" id="sp_descripcion"></span>
                     </div>
                     <div class="form-group col-sm-4">
                         <label for="imagen">Imagen</label>
                         <input class="form-control" type="file" name="imagen" id="imagen" placeholder="Seleccione su Imagen">
+                        <span class="badge badge-warning sp" id="sp_imagen"></span>
                     </div>
                 </div>
 
@@ -114,37 +124,109 @@
 </section>
 <!-- /.content -->
 
+<div class="modal fade" id="mod" role="dialog">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Información</h4>
+            </div>
+            <div class="modal-body">
+                <p id="content"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="mod-acept"> Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 
     document.addEventListener("DOMContentLoaded",function(){
 
-        document.getElementById("Registrar").addEventListener("submit", function (e) {
+           document.getElementById("registrar").addEventListener("submit", function (e) {
 
-            var url = "@Url.Action("Registrar_Producto", "Producto")"/*"/Producto/Registrar_Producto"*/;
+            var url = "@Url.Action("Registrar_Producto", "Producto")";
 
-            var form = document.getElementById("Registrar");
-            var formdata = new FormData(form);
+            //var form = document.getElementById("registrar");
+               var nombre = document.getElementById("nombre").value;
+               var categoria = document.getElementById("categoria").value;
+               var precio = document.getElementById("precio").value;
+               var stock = document.getElementById("stock").value;
+               var codigo = document.getElementById("codigo").value;
+               var descripcion = document.getElementById("descripcion").value;
+               var imagen = document.getElementById("imagen").files[0];
+            
+               var formdata = new FormData();
 
-            var ajax = new XMLHttpRequest();
+               //console.log(imagen);
 
-            ajax.onreadystatechange = function () {
-                if (ajax.readyState == 4) {
-                    
-                    console.log(JSON.parse(ajax.responseText));
+               //var param = "nombre=" + nombre + "&categoria=" + categoria + "&precio=" + precio + "&stock=" + stock + "&codigo=" + codigo + "&descripcion=" + descripcion + "&imagen=" + imagen;
+                
+               formdata.append("nombre", nombre);
+               formdata.append("categoria", categoria);
+               formdata.append("precio", precio);
+               formdata.append("stock", stock);
+               formdata.append("codigo", codigo);
+               formdata.append("descripcion", descripcion);
+               formdata.append("imagen", imagen);
+        
+        var ajax = new XMLHttpRequest();
 
-                    var response = JSON.parse(ajax.responseText);
-                    if (response.success) {
-                        console.log(response.message);
+                ajax.onreadystatechange = function () {
+                    if (ajax.readyState == 4) {
+
+                        //console.log(JSON.parse(ajax.responseText));
+
+                        var response = JSON.parse(ajax.responseText);
+                        if (response.success) {
+                            console.log(response.message);
+
+                            document.getElementById("content").innerHTML = response.message;
+                            $("#mod").modal({ backdrop: true });
+                            limpiar_spam();
+                        } else {
+                            console.log(response);
+                            limpiar_spam();
+                            for (var prop in response.datos) {
+                                //console.log("propiedad " + prop + " valor " + response.datos[prop]);
+                                document.getElementById(prop).innerHTML = response.datos[prop]
+                            }
+                        }
                     }
                 }
-            }
 
-            ajax.open("POST", url, true);
-            ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            ajax.send(formdata);
+                ajax.open("POST", url, true);
+                //ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                //console.log(formdata.toString);
+                ajax.send(formdata);
 
-            e.preventDefault();
+                e.preventDefault();
         })
+
+        document.getElementById("mod-acept").addEventListener("click", function () {
+            $("#mod").modal("hide");
+
+            document.getElementById("nombre").value = "";
+            document.getElementById("categoria").value = "";
+            document.getElementById("precio").value = "";
+            document.getElementById("stock").value = "";
+            document.getElementById("codigo").value = "";
+            document.getElementById("descripcion").value = "";
+            document.getElementById("imagen").files[0]="";
+
+        })
+
+        function limpiar_spam() {
+            var elementos = document.getElementsByClassName("sp");
+            for (i = 0; i < elementos.length ; i++) {
+                elementos.item(i).innerHTML = "";
+            }
+        }
+
+        //------------------------------------------------------------------
+        //------------------------------------------------------------------
 
         function readFile(input) {
             if (input.files && input.files[0]) {

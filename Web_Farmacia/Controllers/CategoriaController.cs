@@ -44,32 +44,63 @@ namespace Web_Farmacia.Controllers
             return RedirectToAction("Consultar_Categoria");
         }
 
-        public ActionResult Modificar_Categoria(int id)
+        public ActionResult Modificar_Categoria(int ? id)
         {
             Categoria cat = new Categoria();
             Metodo_Categoria mc = new Metodo_Categoria();
 
-            cat = mc.obtener(id);
-
-            return View(cat);
-        }
-        [HttpPost]
-        public ActionResult Modificar_Categoria(int id, string nombre, string descripcion)
-        {
-            Metodo_Categoria mc = new Metodo_Categoria();
-            Categoria cat = new Categoria();
-            
-            cat.Id_categoria = id;
-            cat.Nombre = nombre;
-            cat.Descripcion = descripcion;
-            
-            if (mc.actualizar(cat))
+            if (id != null)
             {
-                TempData["Modificar"] = "Se actualizaron los datos correctamente";
+                cat = mc.obtener(id);
+                return View(cat);
             }
             else
             {
-                TempData["Modificar"] = "No se pudo actualizar los datos";
+                return RedirectToAction("Consultar_Categoria");
+            }
+            
+        }
+        [HttpPost]
+        public ActionResult Modificar_Categoria(int ? id, string nombre, string descripcion)
+        {
+            Metodo_Categoria mc = new Metodo_Categoria();
+            Categoria cat = new Categoria();
+            string message;
+
+            SortedList<string, string> datos = new SortedList<string, string>();
+
+            if (id != null)
+            {
+                if (String.IsNullOrEmpty(nombre))
+                {
+                    datos.Add("sp_nombre", "Ingrese el nombre de la categoría");
+                }
+                if (String.IsNullOrEmpty(descripcion))
+                {
+                    datos.Add("sp_descripcion", "Ingrese la descripción de la Categoría");
+                }
+
+                if (datos.Count == 0)
+                {
+                    cat.Id_categoria = id;
+                    cat.Nombre = nombre;
+                    cat.Descripcion = descripcion;
+            
+                    if (mc.actualizar(cat))
+                    {
+                        message = "Se actualizaron los datos correctamente";
+                    }
+                    else
+                    {
+                        message = "No se pudo actualizar los datos";
+                    }
+
+                    return Json(new { message = message, success = true });
+                }
+                else
+                {
+                    return Json(new { message = "Necesita completar los datos necesarios", success = false, datos });
+                }
             }
 
             return RedirectToAction("Consultar_Categoria");
@@ -85,20 +116,41 @@ namespace Web_Farmacia.Controllers
         {
             Categoria cat = new Categoria();
             Metodo_Categoria mc = new Metodo_Categoria();
+            string message;
 
-            cat.Nombre = nombre;
-            cat.Descripcion = descripcion;
+            SortedList<string, string> error = new SortedList<string, string>();
 
-            if (mc.guardar(cat))
+            if (String.IsNullOrEmpty(nombre))
             {
-                ViewBag.message = "Se guardaron los datos correctamente";
+                error.Add("sp_nombre", "Ingrese el Nombre de la Categoría");
+            }
+            if (String.IsNullOrEmpty(descripcion))
+            {
+                error.Add("sp_descripcion", "Ingrese la Descripción");
+            }
+
+            if (error.Count == 0)
+            {
+                cat.Nombre = nombre;
+                cat.Descripcion = descripcion;
+
+                if (mc.guardar(cat))
+                {
+                    message = "Se guardaron los datos correctamente";
+                }
+                else
+                {
+                    message = "No se Guardaron los datos";
+                }
+
+                return Json(new {message = message, success = true });
             }
             else
             {
-                ViewBag.message = "No se Guardaron lo datos";
+                return Json(new { message = "Necesita completar los campos necesarios", success = false, datos = error });
             }
 
-            return Json(new {message = ViewBag.message, success = true });
+            
         }
     }
 }

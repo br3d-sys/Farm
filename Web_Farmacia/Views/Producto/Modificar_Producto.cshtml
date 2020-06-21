@@ -48,11 +48,13 @@
 
             
 
-                <form method="post" action="/Producto/Modificar_Producto" enctype="multipart/form-data">
+                <form method="post" enctype="multipart/form-data" id="modificar">
+
+                    <div class="d-flex">
+                        <a href="@Url.Action("Consultar_Producto", "Producto")" class="btn btn-secondary ml-auto"><i class="fa fa-caret-left"></i> Regresar</a>
+                    </div>
 
                     <div class="form-row">
-
-
                         <input class="form-control" type="hidden" name="id" id="id" value="@Model.Obj_prod.Id_producto">
 
                         <div class="form-group col-sm-6">
@@ -102,8 +104,6 @@
                             <img id="img-up" src="~/Content/Imagenes/@Model.Obj_prod.Imagen" alt="" class="img-thumbnail">
                         </div>
                     </div>
-                    
-
                 </form>
 
 
@@ -118,29 +118,124 @@
     <!-- /.card -->
 </section>
 <!-- /.content -->
+<div class="modal fade" id="mod" role="dialog">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Información</h4>
+            </div>
+            <div class="modal-body">
+                <p id="content"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="mod-acept"><i class="fa fa-caret-left"></i> Regresar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
-    function readFile(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
 
-            reader.onload = function (e) {
-                var filePreview = document.createElement('img');
-                filePreview.id = 'file-preview';
-                filePreview.src = e.target.result;
-                //console.log(e.target.result);
+    document.addEventListener("DOMContentLoaded", function () {
 
-                var previewZone = document.getElementById('img-up');
-                previewZone.src=filePreview.src;
+        document.getElementById("modificar").addEventListener("submit", function (e) {
+
+            var url = "@Url.Action("Modificar_Producto", "Producto")"/*"/Producto/Registrar_Producto"*/;
+
+            //var form = document.getElementById("registrar");
+
+            var id = document.getElementById("id").value;
+            var nombre = document.getElementById("nombre").value;
+            var categoria = document.getElementById("categoria").value;
+            var precio = document.getElementById("precio").value;
+            var stock = document.getElementById("stock").value;
+            var codigo = document.getElementById("codigo").value;
+            var descripcion = document.getElementById("descripcion").value;
+            var imagen = document.getElementById("imagen").files[0];
+            var formdata = new FormData();
+
+            //var param = "id=" + id + "&nombre=" + nombre + "&descripcion=" + descripcion;
+
+            formdata.append("id", id);
+            formdata.append("nombre", nombre);
+            formdata.append("categoria", categoria);
+            formdata.append("precio", precio);
+            formdata.append("stock", stock);
+            formdata.append("codigo", codigo);
+            formdata.append("descripcion", descripcion);
+            formdata.append("imagen", imagen);
+
+            var ajax = new XMLHttpRequest();
+
+            ajax.onreadystatechange = function () {
+                if (ajax.readyState == 4) {
+
+                    //console.log(JSON.parse(ajax.responseText));
+
+                    var response = JSON.parse(ajax.responseText);
+                    if (response.success) {
+                        console.log(response.message);
+
+                        document.getElementById("content").innerHTML = response.message;
+                        $("#mod").modal({ backdrop: true });
+                        limpiar_spam();
+                    } else {
+                        console.log(response);
+                        limpiar_spam();
+                        for (var prop in response.datos) {
+                            //console.log("propiedad " + prop + " valor " + response.datos[prop]);
+                            document.getElementById(prop).innerHTML = response.datos[prop]
+                        }
+                    }
+                }
             }
 
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
+            ajax.open("POST", url, true);
+            //ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            //console.log(formdata.toString);
+            ajax.send(formdata);
 
-    var fileUpload = document.getElementById('imagen');
-    fileUpload.onchange = function (e) {
-        readFile(e.srcElement);
-    }
+            e.preventDefault();
+        })
+
+        document.getElementById("mod-acept").addEventListener("click", function () {
+            $("#mod").modal("hide");
+
+            location.replace("@Url.Action("Consultar_Producto", "Producto")");
+        })
+
+        function limpiar_spam() {
+            var elementos = document.getElementsByClassName("sp");
+            for (i = 0; i < elementos.length ; i++) {
+                elementos.item(i).innerHTML = "";
+            }
+        }
+        //--------------------------------------------------------------------------
+        //--------------------------------------------------------------------------
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var filePreview = document.createElement('img');
+                    filePreview.id = 'file-preview';
+                    filePreview.src = e.target.result;
+                    //console.log(e.target.result);
+
+                    var previewZone = document.getElementById('img-up');
+                    previewZone.src = filePreview.src;
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        var fileUpload = document.getElementById('imagen');
+        fileUpload.onchange = function (e) {
+            readFile(e.srcElement);
+        }
+
+    })
 
 </script>

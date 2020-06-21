@@ -42,9 +42,7 @@ namespace Web_Farmacia.Models
                         {
                             return false;
                         }
-
                     }
-
                 }
             }
             catch (Exception ex)
@@ -58,14 +56,7 @@ namespace Web_Farmacia.Models
         {
             try
             {
-
-                //DELIMITER //
-                //CREATE PROCEDURE nombre_proc()
-                //BEGIN
-                //SELECT * FROM tbl_categoria;
-                //END//
-                //DELIMITER;
-
+                
                 MySqlDataReader rd;
                 List<Categoria> lista = new List<Categoria>();
 
@@ -100,9 +91,7 @@ namespace Web_Farmacia.Models
             catch (Exception)
             {
                 return null;
-
             }
-
         }
 
         public Boolean eliminar(int id)
@@ -146,7 +135,8 @@ namespace Web_Farmacia.Models
                     using (cmd = new MySqlCommand())
                     {
                         cmd.CommandText = "SP_M_Tabla_Categoria";
-                          //  cmd.CommandText = string.Format("update tbl_categoria set nombre='{0}',descripcion='{1}' where id_categoria ='{2}'"
+                        //  cmd.CommandText = string.Format("update tbl_categoria set nombre='{0}',
+                        //descripcion ='{1}' where id_categoria ='{2}'"
                           //, cat.Nombre, cat.Descripcion, cat.Id_categoria);
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Connection = con;
@@ -176,7 +166,7 @@ namespace Web_Farmacia.Models
 
         }
 
-        public Categoria obtener(int id)
+        public Categoria obtener(int ? id)
         {
             try
             {

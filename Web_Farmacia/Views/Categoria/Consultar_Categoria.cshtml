@@ -25,7 +25,7 @@
     <!-- Default box -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Categorias</h3>
+            <h3 class="card-title">Categorias </h3>
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
                     <i class="fa fa-minus"></i>
@@ -55,6 +55,10 @@
                 </div>
             }
 
+            <div class="d-flex mb-4">
+                <a href="@Url.Action("Registrar_Categoria", "Categoria")" class="btn btn-secondary ml-auto" @*id="return"*@><i class="fa fa-plus"></i> Agregar</a>
+            </div>
+
             <div class="row">
                 <div class="col-12 table-responsive">
                     <table class="table table-striped">
@@ -74,7 +78,7 @@
                                         <td>@categoria.Descripcion</td>
                                         <td class="text-center">
                                             <a href="/Categoria/Modificar_Categoria?id=@categoria.Id_categoria" class="btn btn-primary" id="actualizar"><i class="fa fa-edit"></i></a>
-                                            <a href="/Categoria/eliminar?id=@categoria.Id_categoria" class="btn btn-danger" id="Eliminar"><i class="fa fa-trash"></i></a>
+                                            <button onclick="eliminar('@categoria.Id_categoria')" class="btn btn-danger" id="Eliminar"><i class="fa fa-trash"></i></button>
 
                                         </td>
                                     </tr>
@@ -100,4 +104,54 @@
     <!-- /.card -->
 </section>
 <!-- /.content -->
+<div class="modal fade" id="mod" role="dialog">
 
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Información</h4>
+            </div>
+            <div class="modal-body">
+                <p id="content">Desea eliminar la Categoria?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="mod-acept"> Eliminar</button><button class="btn btn-secondary" id="mod-can">Cancelar</button>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<script>
+
+    var f_id;
+
+    document.addEventListener("DOMContentLoaded", function (e) {
+        
+        
+
+        document.getElementById("mod-acept").addEventListener("click", function () {
+            location.replace("/Categoria/eliminar?id=" + f_id);
+            $("#mod").modal("hide");
+        })
+        document.getElementById("mod-can").addEventListener("click", function () {
+            $("#mod").modal("hide");
+        })
+
+        function limpiar_spam() {
+            var elementos = document.getElementsByClassName("sp");
+            for (i = 0; i < elementos.length ; i++) {
+                elementos.item(i).innerHTML = "";
+            }
+        }
+    })
+
+    function eliminar(id) {
+        $("#mod").modal({ backdrop: true });
+        f_id = id;
+    }
+
+
+</script>
