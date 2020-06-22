@@ -286,8 +286,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Clases\Cargo.cs" />
     <Compile Include="Clases\Categoria.cs" />
+    <Compile Include="Clases\Cliente.cs" />
+    <Compile Include="Clases\DetalleVenta.cs" />
     <Compile Include="Clases\Producto.cs" />
+    <Compile Include="Clases\Usuario.cs" />
+    <Compile Include="Clases\Venta.cs" />
     <Compile Include="Conexion.cs" />
     <Compile Include="Controllers\CategoriaController.cs" />
     <Compile Include="Controllers\Info.cs" />
