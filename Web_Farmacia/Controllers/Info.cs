@@ -11,6 +11,8 @@ namespace Web_Farmacia.Controllers
         private List<Producto> prod;
         private List<Categoria> cat;
         private Producto obj_prod;
+        private List<Cliente> cli;
+        private Cliente obj_cli;
 
         public Info()
         {
@@ -53,6 +55,32 @@ namespace Web_Farmacia.Controllers
             set
             {
                 obj_prod = value;
+            }
+        }
+
+        public List<Cliente> Cli
+        {
+            get
+            {
+                return cli;
+            }
+
+            set
+            {
+                cli = value;
+            }
+        }
+
+        public Cliente Obj_cli
+        {
+            get
+            {
+                return obj_cli;
+            }
+
+            set
+            {
+                obj_cli = value;
             }
         }
     }
