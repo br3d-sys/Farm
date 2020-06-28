@@ -34,24 +34,24 @@ namespace Web_Farmacia.Controllers
 
             return View(datos);
         }
-        //[HttpPost]
-        //public ActionResult Consultar_Cliente(string nombre, string dni)
-        //{
-        //    List<Cliente> cli;
-        //    //List<Categoria> cat;
-        //    Metodo_Cliente mc = new Metodo_Cliente();
-        //    //Metodo_Categoria mc = new Metodo_Categoria();
-        //    Info datos = new Info();
-        //    //List<Object> todo = new List<Object>();
+        [HttpPost]
+        public ActionResult Consultar_Cliente(string nombre, string dni)
+        {
+            List<Cliente> cli;
+            //List<Categoria> cat;
+            Metodo_Cliente mc = new Metodo_Cliente();
+            //Metodo_Categoria mc = new Metodo_Categoria();
+            Info datos = new Info();
+            //List<Object> todo = new List<Object>();
 
-        //    cli = mc.listar();
+            cli = mc.listar();
 
-        //    ViewBag.eliminar = TempData["Eliminar"];
-            
-        //    datos.Cli = cli;
-            
-        //    return View(datos);
-        //}
+            ViewBag.eliminar = TempData["Eliminar"];
+
+            datos.Cli = cli;
+
+            return View(datos);
+        }
 
         public ActionResult eliminar(int id)
         {
@@ -65,7 +65,7 @@ namespace Web_Farmacia.Controllers
                 TempData["Eliminar"] = "No se eliminó Correctamente el Registro";
             }
 
-            return RedirectToAction("Consultar_Producto");
+            return RedirectToAction("Consultar_Cliente");
         }
 
         public ActionResult Modificar_Cliente(int? id)
@@ -84,7 +84,7 @@ namespace Web_Farmacia.Controllers
             }
             else
             {
-                return RedirectToAction("Consultar_Producto");
+                return RedirectToAction("Consultar_Cliente");
             }
 
 
@@ -118,17 +118,17 @@ namespace Web_Farmacia.Controllers
                 if (error.Count == 0)
                 {
                     cli.Id_cliente = id;
-                    cli.Nombre = nombre;
-                    cli.T_documento = t_documento;
-                    cli.N_documento = n_documento;
-                    cli.Direccion = direccion;
-                    cli.Celular = celular;
-                    cli.Correo = correo;
-                    cli.Edad = edad;
-                    cli.Sexo = sexo;
-                    cli.Est_civil = est_civil;
-                    cli.Usuario = usuario;
-                    cli.Contraseña = contraseña;
+                    cli.Nombre = nombre==null?"":nombre;
+                    cli.T_documento = t_documento == null ? "" : t_documento;
+                    cli.N_documento = n_documento == null ? "" : n_documento;
+                    cli.Direccion = direccion == null ? "" : direccion;
+                    cli.Celular = celular == null ? "" : celular;
+                    cli.Correo = correo == null ? "" : correo;
+                    cli.Edad = edad == null ? 0 : edad;
+                    cli.Sexo = sexo == null ? "" : sexo;
+                    cli.Est_civil = est_civil == null ? "" : est_civil;
+                    cli.Usuario = usuario == null ? "" : usuario;
+                    cli.Contraseña = contraseña == null ? "" : contraseña;
                     
                     if (mc.actualizar(cli))
                     {
@@ -185,17 +185,17 @@ namespace Web_Farmacia.Controllers
             
             if (error.Count == 0)
             {
-                cli.Nombre = nombre;
-                cli.T_documento = t_documento;
-                cli.N_documento = n_documento;
-                cli.Direccion = direccion;
-                cli.Celular = celular;
-                cli.Correo = correo;
-                cli.Edad = edad;
-                cli.Sexo = sexo;
-                cli.Est_civil = est_civil;
-                cli.Usuario = usuario;
-                cli.Contraseña = contraseña;
+                cli.Nombre = nombre == null ? "" : nombre;
+                cli.T_documento = t_documento == null ? "" : t_documento;
+                cli.N_documento = n_documento == null ? "" : n_documento;
+                cli.Direccion = direccion == null ? "" : direccion;
+                cli.Celular = celular == null ? "" : celular;
+                cli.Correo = correo == null ? "" : correo;
+                cli.Edad = edad == null ? 0 : edad;
+                cli.Sexo = sexo == null ? "" : sexo;
+                cli.Est_civil = est_civil == null ? "" : est_civil;
+                cli.Usuario = usuario == null ? "" : usuario;
+                cli.Contraseña = contraseña == null ? "" : contraseña;
 
                 if (mc.guardar(cli))
                 {

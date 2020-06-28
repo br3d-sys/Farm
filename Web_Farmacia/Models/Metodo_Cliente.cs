@@ -40,7 +40,7 @@ namespace Web_Farmacia.Models
                         cmd.Parameters.AddWithValue("_sexo", cli.Sexo);
                         cmd.Parameters.AddWithValue("_est_civil", cli.Est_civil);
                         cmd.Parameters.AddWithValue("_usuario", cli.Usuario);
-                        cmd.Parameters.AddWithValue("_contraseña", cli.Contraseña);
+                        cmd.Parameters.AddWithValue("_contrasena", cli.Contraseña);
 
                         if (cmd.ExecuteNonQuery() > 0)
                         {
@@ -62,8 +62,8 @@ namespace Web_Farmacia.Models
 
         public List<Cliente> listar()
         {
-            //try
-            //{
+            try
+            {
 
                 MySqlDataReader rd;
                 List<Cliente> lista = new List<Cliente>();
@@ -86,12 +86,12 @@ namespace Web_Farmacia.Models
                                 Nombre = rd.GetString("nombre"),
                                 T_documento = rd.GetString("t_documento"),
                                 N_documento = rd.GetValue(3) == DBNull.Value?String.Empty: rd.GetString("n_documento"),
-                                //Direccion = rd.GetString("direccion")==null?"": rd.GetString("direccion"),
-                                //Celular = rd.GetString("celular") == null ? "" : rd.GetString("celular"),
-                                //Correo = rd.GetString("correo") == null ? "" : rd.GetString("correo"),
-                                //Edad = rd.GetInt32("edad") == 0 ? 0 : rd.GetInt32("edad"),
-                                //Sexo = rd.GetString("sexo") == null ? "" : rd.GetString("sexo"),
-                                //Est_civil = rd.GetString("est_civil") == null ? "" : rd.GetString("est_civil")
+                                Direccion = rd.GetString("direccion") == null ? "" : rd.GetString("direccion"),
+                                Celular = rd.GetString("celular") == null ? "" : rd.GetString("celular"),
+                                Correo = rd.GetString("correo") == null ? "" : rd.GetString("correo"),
+                                Edad = rd.GetInt32("edad") == 0 ? 0 : rd.GetInt32("edad"),
+                                Sexo = rd.GetString("sexo") == null ? "" : rd.GetString("sexo"),
+                                Est_civil = rd.GetString("est_civil") == null ? "" : rd.GetString("est_civil")
                             });
                         }
 
@@ -101,11 +101,11 @@ namespace Web_Farmacia.Models
                 }
 
                 return lista;
-             //}
-            //catch (Exception)
-            //{
-            //    return null;
-            //}
+        }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public Boolean eliminar(int id)
@@ -165,7 +165,7 @@ namespace Web_Farmacia.Models
                         cmd.Parameters.AddWithValue("_sexo", cli.Sexo);
                         cmd.Parameters.AddWithValue("_est_civil", cli.Est_civil);
                         cmd.Parameters.AddWithValue("_usuario", cli.Usuario);
-                        cmd.Parameters.AddWithValue("_contraseña", cli.Contraseña);
+                        cmd.Parameters.AddWithValue("_contrasena", cli.Contraseña);
                         cmd.Parameters.AddWithValue("_id_cliente", cli.Id_cliente);
 
 
@@ -192,8 +192,8 @@ namespace Web_Farmacia.Models
 
         public Cliente obtener(int? id)
         {
-            try
-            {
+            //try
+            //{
                 MySqlDataReader rd;
                 Cliente cli = new Cliente();
 
@@ -223,7 +223,7 @@ namespace Web_Farmacia.Models
                             cli.Sexo = rd.GetString("sexo");
                             cli.Est_civil = rd.GetString("est_civil");
                             cli.Usuario = rd.GetString("usuario");
-                            cli.Contraseña = rd.GetString("contraseña");
+                            cli.Contraseña = rd.GetString("contrasena");
                         }
 
                         rd.Close();
@@ -232,11 +232,11 @@ namespace Web_Farmacia.Models
                 }
 
                 return cli;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            //}
+            //catch (Exception)
+            //{
+            //    return null;
+            //}
 
         }
     }
