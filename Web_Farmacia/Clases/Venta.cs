@@ -9,11 +9,13 @@ namespace Web_Farmacia.Clases
     {
         private int ? id_venta;
         private int? id_cliente;
-        private DateTime fecha;
+        private string cliente;
+        private DateTime? fecha;
         private string t_comprobante;
         private string s_comprobante;
         private string n_comprobante;
-        private int? total;
+        private Double? total;
+        private string nom_usuario;
         private int? id_usuario;
         private string est_entrega;
         private string estado;
@@ -44,7 +46,7 @@ namespace Web_Farmacia.Clases
             }
         }
 
-        public DateTime Fecha
+        public DateTime? Fecha
         {
             get
             {
@@ -96,7 +98,7 @@ namespace Web_Farmacia.Clases
             }
         }
 
-        public int? Total
+        public Double? Total
         {
             get
             {
@@ -145,6 +147,32 @@ namespace Web_Farmacia.Clases
             set
             {
                 estado = value;
+            }
+        }
+
+        public string Cliente
+        {
+            get
+            {
+                return cliente;
+            }
+
+            set
+            {
+                cliente = value;
+            }
+        }
+
+        public string Nom_usuario
+        {
+            get
+            {
+                return nom_usuario;
+            }
+
+            set
+            {
+                nom_usuario = value;
             }
         }
     }

@@ -11,8 +11,8 @@ namespace Web_Farmacia.Clases
         private int? id_producto;
         private int? id_venta;
         private int? cantidad;
-        private int? precio;
-        private int? total;
+        private Double? precio;
+        private Double? total;
 
         public int? Id_detalleventa
         {
@@ -66,7 +66,7 @@ namespace Web_Farmacia.Clases
             }
         }
 
-        public int? Precio
+        public Double? Precio
         {
             get
             {
@@ -79,7 +79,7 @@ namespace Web_Farmacia.Clases
             }
         }
 
-        public int? Total
+        public Double? Total
         {
             get
             {

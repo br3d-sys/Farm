@@ -4,5 +4,359 @@
     Layout = "~/Views/Main.cshtml";
 }
 
-<h2>Registrar_Venta</h2>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Registrar Venta</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Registrar Venta</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Registrar</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+
+            @model Web_Farmacia.Controllers.Info
+
+            <form method="post" enctype="multipart/form-data" id="registrar">
+
+                <div class="d-flex mb-4">
+                    <a href="@Url.Action("Consultar_Venta", "Venta")" class="btn btn-secondary ml-auto"><i class="fa fa-caret-left"></i> Lista de Ventas</a>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-sm-6">
+                        <input type="hidden" name="id_usuario" id="id_usuario" value="1" />
+                        <label for="id_cliente">Cliente</label>
+                        <select class="form-control" name="id_cliente" id="id_cliente">
+                            @foreach (var item in Model.Cli)
+                            {
+                                <option value="@item.Id_cliente">@item.Nombre</option>
+                            }
+                        </select>
+                        <span class="badge badge-warning sp" id="sp_id_cliente"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="fecha">Fecha</label>
+                        <input type="date" name="fecha" id="fecha" class="form-control" placeholder="Ingrese la Fecha" />
+                        <span class="badge badge-warning sp" id="sp_fecha"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-4">
+                        <label for="t_comprobante">Tipo de Comprobante</label>
+                        <select class="form-control" name="t_comprobante" id="t_comprobante">
+                            <option value="boleta">Boleta</option>
+                            <option value="factura">Factura</option>
+                            <option value="ticket">Ticket</option>
+                        </select>
+                        <span class="badge badge-warning sp" id="sp_t_comprobante"></span>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="serie_com">Serie de Comprobante</label>
+                        <input class="form-control" type="text" name="serie_com" id="serie_com" placeholder="Ingrese la serie" />
+                        <span class="badge badge-warning sp" id="sp_serie_com"></span>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="nro_com">Nro de Comprobante</label>
+                        <input class="form-control" type="text" name="nro_com" id="nro_com" placeholder="Ingrese el N°">
+                        <span class="badge badge-warning sp" id="sp_nro_com"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-4">
+                        <label for="est_entrega">Estado de Entrega</label>
+                        <select class="form-control" name="est_entrega" id="est_entrega">
+                            <option value="pendiente">Pendiente</option>
+                            <option value="entregado">Entregado</option>
+                        </select>
+                        <span class="badge badge-warning sp" id="sp_est_entrega"></span>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="estado">Estado de Pago</label>
+                        <select class="form-control" name="estado" id="estado">
+                            <option value="pendiente">Pendiente</option>
+                            <option value="pagado">Pagado</option>
+                        </select>
+                        <span class="badge badge-warning sp" id="sp_estado"></span>
+                    </div>
+
+                    <div class="col-sm-2 align-self-center align-self-end text-center">
+                        <button id="btn_articulos" type="button" class="btn btn-primary pr-4 pl-4">Agregar Artículo</button>
+                    </div>
+
+                </div>
+                <div id="tab" class="form-row col-sm-12">
+                    <table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
+                        <thead style="background-color:#A9D0F5">
+                            <tr>
+                                <th>Opciones</th>
+                                <th>Artículo</th>
+                                <th>Cantidad</th>
+                                <th>Precio Venta</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>TOTAL</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th><h4 id="total">S/. 0.00</h4><input type="hidden" name="total_venta" id="total_venta"></th>
+                            </tr>
+                        </tfoot>
+                        <tbody id="table_content">
+                           
+                        </tbody>
+                    </table>
+                    <span class="badge badge-warning sp" id="sp_id_usuario"></span>
+                    <span class="badge badge-warning sp" id="sp_total_venta"></span>
+                    <span class="badge badge-warning sp" id="sp_detalle_productos"></span>
+                </div>
+
+                <div class="form-row d-flex justify-content-between">
+                    <div class="form-group col-auto">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            Paginación
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->
+
+<div class="modal fade" id="lista_articulos" role="dialog">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Información</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-12 table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Categoria</th>
+                                    <th>Stock</th>
+                                    <th>Precio</th>
+                                    <th>Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    foreach (var producto in Model.Prod)
+                                    {
+                                        <tr>
+                                            <td>@producto.Nombre</td>
+                                            <td>@producto.Nom_categoria</td>
+                                            <td>@producto.Stock</td>
+                                            <td>@producto.Precio</td>
+                                            <td class="text-center">
+                                                <button onclick="agregar('@producto.Id_producto','@producto.Nombre','@producto.Precio')" class="btn btn-secondary" id="Agregar"><i class="fa fa-plus"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="mod-cerrar">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mod" role="dialog">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Información</h4>
+            </div>
+            <div class="modal-body">
+                <p id="content"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="mod-acept"> Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    //document.addEventListener("DOMContentLoaded",function(){
+
+           document.getElementById("registrar").addEventListener("submit", function (e) {
+
+            var url = "@Url.Action("Registrar_Venta", "Venta")";
+
+               var form = document.getElementById("registrar");
+
+               var formdata = new FormData(form);
+
+                var ajax = new XMLHttpRequest();
+
+                ajax.onreadystatechange = function () {
+                    if (ajax.readyState == 4) {
+
+                        var response = JSON.parse(ajax.responseText);
+                        if (response.success) {
+                            console.log(response.message);
+
+                            document.getElementById("content").innerHTML = response.message;
+                            $("#mod").modal({ backdrop: true });
+                            limpiar_spam();
+                        } else {
+                            console.log(response);
+                            limpiar_spam();
+                            for (var prop in response.datos) {
+                                //console.log("propiedad " + prop + " valor " + response.datos[prop]);
+                                document.getElementById(prop).innerHTML = response.datos[prop]
+                            }
+                        }
+                    }
+                }
+
+                ajax.open("POST", url, true);
+                //ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                ajax.send(formdata);
+
+                e.preventDefault();
+        })
+
+        document.getElementById("mod-acept").addEventListener("click", function () {
+            $("#mod").modal("hide");
+
+            document.getElementById("fecha").value="";
+            document.getElementById("serie_com").value = "";
+            document.getElementById("nro_com").value = "";
+            document.getElementById("est_entrega").value = "pendiente";
+            document.getElementById("estado").value = "pendiente";
+            document.getElementById("table_content").innerHTML = "";
+            document.getElementById("total_venta").value = "";
+            document.getElementById("total").innerHTML = "S/. 0";
+
+
+        })
+
+        function limpiar_spam() {
+            var elementos = document.getElementsByClassName("sp");
+            for (i = 0; i < elementos.length ; i++) {
+                elementos.item(i).innerHTML = "";
+            }
+        }
+
+        document.getElementById("btn_articulos").addEventListener("click", function () {
+            $("#lista_articulos").modal({ backdrop: true });
+        })
+
+        function agregar(id,nombre,precio) {
+            document.getElementById("table_content").innerHTML += 
+                            '<tr>'+
+                                '<td><button type="button" onclick="eliminarDetalle(this)" name="b_eliminar"><i class="fa fa-trash"></button></td>'+
+                                '<td><input type="hidden" name="id_producto[]" id="id_producto[]" value="' + id + '"/>' + nombre + '</td>' +
+                                '<td><input type="number" name="cantidad[]" id="cantidad[]" value="0" /></td>' +
+                                '<td><input type="number" name="precio[]" id="precio[]" value="' + precio + '" /></td>' +
+                                '<td><input type="number" name="art_total[]" id="art_total[]" value="0.00" /></td>' +
+                            '</tr>';
+            sumar_total();
+        }
+
+        function eliminarDetalle(elemento) {
+            //if (event.target.name == "b_eliminar") {
+            
+            var elem = elemento.parentNode.parentNode.rowIndex;//.parentNode.parentNode.rowIndex;
+
+            eliminarFila(elem);
+            
+
+            //}
+        }
+        function eliminarFila(row) {
+            document.getElementById("detalles").deleteRow(row);
+            sumar_total();
+        }
+
+        //var elementos = document.getElementsByName("cantidad");
+
+        document.getElementById("tab").addEventListener("change", function () {
+
+            recorrer();
+            sumar_total();
+        })
+
+        function recorrer() {
+            var filas = document.getElementById("detalles").rows.length;
+
+            var cantidad = document.getElementsByName("cantidad[]");
+            var art_total = document.getElementsByName("art_total[]");
+            var precio = document.getElementsByName("precio[]");
+
+            for (i = 0; i < filas-2; i++) {
+                art_total[i].value = cantidad[i].value * precio[i].value;
+                //alert(i);
+            }
+
+        }
+        function sumar_total() {
+            var filas = document.getElementById("detalles").rows.length;
+            var precio = document.getElementsByName("art_total[]");
+
+            var suma=0.0;
+
+            for (i = 0; i < filas-2; i++) {
+                suma = parseInt(suma)+ parseInt(precio[i].value);
+                //alert(i);
+            }
+
+            document.getElementById("total_venta").value = suma;
+            document.getElementById("total").innerHTML = "S/. "+suma;
+        }
+
+       
+
+    //})
+
+</script>
 

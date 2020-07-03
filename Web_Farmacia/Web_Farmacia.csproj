@@ -304,8 +304,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Metodo_Cargo.cs" />
     <Compile Include="Models\Metodo_Categoria.cs" />
     <Compile Include="Models\Metodo_Cliente.cs" />
+    <Compile Include="Models\Metodo_DetalleVenta.cs" />
     <Compile Include="Models\Metodo_Producto.cs" />
     <Compile Include="Models\Metodo_Usuario.cs" />
     <Compile Include="Models\Metodo_Venta.cs" />

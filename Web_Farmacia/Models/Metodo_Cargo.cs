@@ -7,16 +7,16 @@ using MySql.Data.MySqlClient;
 
 namespace Web_Farmacia.Models
 {
-    public class Metodo_Cliente
+    public class Metodo_Cargo
     {
         MySqlCommand cmd;
         MySqlConnection con;
 
-        public Metodo_Cliente()
+        public Metodo_Cargo()
         {
 
         }
-        public Boolean guardar(Cliente cli)
+        public Boolean guardar(Cargo car)
         {
             try
             {
@@ -24,23 +24,14 @@ namespace Web_Farmacia.Models
                 {
                     using (cmd = new MySqlCommand())
                     {
-                        cmd.CommandText = "SP_A_Tabla_Cliente";
+                        cmd.CommandText = "SP_A_Tabla_Cargo";
                         //cmd.CommandText = string.Format("insert into tbl_categoria(nombre,descripcion)" +
                         //    "values('{0}','{1}')", cat.Nombre, cat.Descripcion);
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Connection = con;
 
-                        cmd.Parameters.AddWithValue("_nombre", cli.Nombre);
-                        cmd.Parameters.AddWithValue("_t_documento", cli.T_documento);
-                        cmd.Parameters.AddWithValue("_n_documento", cli.N_documento);
-                        cmd.Parameters.AddWithValue("_direccion", cli.Direccion);
-                        cmd.Parameters.AddWithValue("_celular", cli.Celular);
-                        cmd.Parameters.AddWithValue("_correo", cli.Correo);
-                        cmd.Parameters.AddWithValue("_edad", cli.Edad);
-                        cmd.Parameters.AddWithValue("_sexo", cli.Sexo);
-                        cmd.Parameters.AddWithValue("_est_civil", cli.Est_civil);
-                        cmd.Parameters.AddWithValue("_usuario", cli.Usuario);
-                        cmd.Parameters.AddWithValue("_contrasena", cli.Contraseña);
+                        cmd.Parameters.AddWithValue("_nombre", car.Nombre);
+                        cmd.Parameters.AddWithValue("_detalle", car.Detalle);
 
                         if (cmd.ExecuteNonQuery() > 0)
                         {
@@ -60,19 +51,19 @@ namespace Web_Farmacia.Models
 
         }
 
-        public List<Cliente> listar()
+        public List<Cargo> listar()
         {
             try
             {
 
                 MySqlDataReader rd;
-                List<Cliente> lista = new List<Cliente>();
+                List<Cargo> lista = new List<Cargo>();
 
                 using (con = Conexion.conectar())
                 {
                     using (cmd = new MySqlCommand())
                     {
-                        cmd.CommandText = "SP_C_Tabla_Cliente";
+                        cmd.CommandText = "SP_C_Tabla_Cargo";
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Connection = con;
 
@@ -80,18 +71,12 @@ namespace Web_Farmacia.Models
 
                         while (rd.Read())
                         {
-                            lista.Add(new Cliente
+                            lista.Add(new Cargo
                             {
-                                Id_cliente = rd.GetInt32("id_cliente"),
+                                Id_cargo = rd.GetInt32("id_cargo"),
                                 Nombre = rd.GetString("nombre"),
-                                T_documento = rd.GetString("t_documento"),
-                                N_documento = rd.GetString("n_documento"),
-                                Direccion = rd.GetString("direccion"),
-                                Celular = rd.GetString("celular"),
-                                Correo = rd.GetString("correo"),
-                                Edad = rd.GetInt32("edad"),
-                                Sexo = rd.GetString("sexo"),
-                                Est_civil = rd.GetString("est_civil")
+                                Detalle = rd.GetString("detalle"),
+
                             });
                         }
 
@@ -101,7 +86,7 @@ namespace Web_Farmacia.Models
                 }
 
                 return lista;
-        }
+            }
             catch (Exception)
             {
                 return null;
@@ -116,12 +101,12 @@ namespace Web_Farmacia.Models
                 {
                     using (cmd = new MySqlCommand())
                     {
-                        cmd.CommandText = "SP_E_Tabla_Cliente";
+                        cmd.CommandText = "SP_E_Tabla_Cargo";
                         //cmd.CommandText = string.Format("Delete from tbl_categoria where id_categoria = {0}", id);
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Connection = con;
 
-                        cmd.Parameters.AddWithValue("_id_cliente", id);
+                        cmd.Parameters.AddWithValue("_id_cargo", id);
 
                         if (cmd.ExecuteNonQuery() > 0)
                         {
@@ -140,7 +125,7 @@ namespace Web_Farmacia.Models
             }
         }
 
-        public Boolean actualizar(Cliente cli)
+        public Boolean actualizar(Cargo car)
         {
             try
             {
@@ -148,26 +133,16 @@ namespace Web_Farmacia.Models
                 {
                     using (cmd = new MySqlCommand())
                     {
-                        cmd.CommandText = "SP_M_Tabla_Cliente";
+                        cmd.CommandText = "SP_M_Tabla_Cargo";
                         //  cmd.CommandText = string.Format("update tbl_categoria set nombre='{0}',
                         //descripcion ='{1}' where id_categoria ='{2}'"
                         //, cat.Nombre, cat.Descripcion, cat.Id_categoria);
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Connection = con;
 
-                        cmd.Parameters.AddWithValue("_nombre", cli.Nombre);
-                        cmd.Parameters.AddWithValue("_t_documento", cli.T_documento);
-                        cmd.Parameters.AddWithValue("_n_documento", cli.N_documento);
-                        cmd.Parameters.AddWithValue("_direccion", cli.Direccion);
-                        cmd.Parameters.AddWithValue("_celular", cli.Celular);
-                        cmd.Parameters.AddWithValue("_correo", cli.Correo);
-                        cmd.Parameters.AddWithValue("_edad", cli.Edad);
-                        cmd.Parameters.AddWithValue("_sexo", cli.Sexo);
-                        cmd.Parameters.AddWithValue("_est_civil", cli.Est_civil);
-                        cmd.Parameters.AddWithValue("_usuario", cli.Usuario);
-                        cmd.Parameters.AddWithValue("_contrasena", cli.Contraseña);
-                        cmd.Parameters.AddWithValue("_id_cliente", cli.Id_cliente);
-
+                        cmd.Parameters.AddWithValue("_nombre", car.Nombre);
+                        cmd.Parameters.AddWithValue("_detalle", car.Detalle);
+                        cmd.Parameters.AddWithValue("_id_cargo", car.Id_cargo);
 
                         if (cmd.ExecuteNonQuery() > 0)
                         {
@@ -190,40 +165,31 @@ namespace Web_Farmacia.Models
 
         }
 
-        public Cliente obtener(int? id)
+        public Cargo obtener(int? id)
         {
             try
             {
                 MySqlDataReader rd;
-                Cliente cli = new Cliente();
+                Cargo car = new Cargo();
 
                 using (con = Conexion.conectar())
                 {
                     using (cmd = new MySqlCommand())
                     {
-                        cmd.CommandText = "SP_O_Tabla_Cliente";
+                        cmd.CommandText = "SP_O_Tabla_Cargo";
                         //cmd.CommandText = string.Format("Select * from tbl_categoria where id_categoria='{0}'", id);
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Connection = con;
 
-                        cmd.Parameters.AddWithValue("_id_cliente", id);
+                        cmd.Parameters.AddWithValue("_id_cargo", id);
 
                         rd = cmd.ExecuteReader();
 
                         while (rd.Read())
                         {
-                            cli.Id_cliente = rd.GetInt32("id_cliente");
-                            cli.Nombre = rd.GetString("nombre");
-                            cli.T_documento = rd.GetString("t_documento");
-                            cli.N_documento = rd.GetString("n_documento");
-                            cli.Direccion = rd.GetString("direccion");
-                            cli.Celular = rd.GetString("celular");
-                            cli.Correo = rd.GetString("correo");
-                            cli.Edad = rd.GetInt32("edad");
-                            cli.Sexo = rd.GetString("sexo");
-                            cli.Est_civil = rd.GetString("est_civil");
-                            cli.Usuario = rd.GetString("usuario");
-                            cli.Contraseña = rd.GetString("contrasena");
+                            car.Id_cargo = rd.GetInt32("id_cargo");
+                            car.Nombre = rd.GetString("nombre");
+                            car.Detalle = rd.GetString("detalle");
                         }
 
                         rd.Close();
@@ -231,8 +197,8 @@ namespace Web_Farmacia.Models
                     }
                 }
 
-                return cli;
-        }
+                return car;
+            }
             catch (Exception)
             {
                 return null;

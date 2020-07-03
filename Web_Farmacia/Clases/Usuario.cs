@@ -17,6 +17,7 @@ namespace Web_Farmacia.Clases
         private string celular;
         private string direccion;
         private int? id_cargo;
+        private string nom_cargo;
 
         public int? Id_usuario
         {
@@ -145,6 +146,19 @@ namespace Web_Farmacia.Clases
             set
             {
                 id_cargo = value;
+            }
+        }
+
+        public string Nom_cargo
+        {
+            get
+            {
+                return nom_cargo;
+            }
+
+            set
+            {
+                nom_cargo = value;
             }
         }
     }

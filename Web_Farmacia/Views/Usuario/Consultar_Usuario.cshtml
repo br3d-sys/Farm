@@ -4,5 +4,179 @@
     Layout = "~/Views/Main.cshtml";
 }
 
-<h2>Consultar_Usuario</h2>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Lista de Usuarios</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Listar Usuarios</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Usuarios</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+
+
+            @model Web_Farmacia.Controllers.Info
+
+            <div class="d-flex mb-4">
+                <a href="@Url.Action("Registrar_Usuario", "Usuario")" class="btn btn-secondary ml-auto"><i class="fa fa-plus"></i> Agregar</a>
+            </div>
+
+
+            <form action="/Usuario/Consultar_Usuario" method="post" class="">
+
+                <div class="form-row">
+                    <div class="form-group col-sm-6">
+                        <label for="nombre">Nombre</label>
+                        <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese su Nombre">
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="documento">N° Documento</label>
+                        <input class="form-control" type="text" name="documento" id="documento" placeholder="Ingrese el M°">
+                    </div>
+                    <div class="col-sm-2 align-self-center align-self-end text-center">
+                        <button type="submit" class="btn btn-primary pr-4 pl-4">Buscar</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Table row -->
+
+            @if (ViewBag.eliminar != null)
+            {
+                <div class="alert alert-dark" role="alert">
+                    @ViewBag.eliminar
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-12 table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Usuario</th>
+                                <th>T. Doc</th>
+                                <th>N. Doc</th>
+                                <th>Dirección</th>
+                                <th>Celular</th>
+                                <th>Correo</th>
+                                <th>Cargo</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var usuario in Model.Usu)
+                                {
+                                    <tr>
+                                        <td>@usuario.Nombre</td>
+                                        <td>@usuario.Nom_usuario</td>
+                                        <td>@usuario.Documento</td>
+                                        <td>@usuario.N_documento</td>
+                                        <td>@usuario.Direccion</td>
+                                        <td>@usuario.Celular</td>
+                                        <td>@usuario.Correo</td>
+                                        <td>@usuario.Nom_cargo</td>
+                                        <td class="text-center">
+                                            <a href="/Usuario/Modificar_Usuario?id=@usuario.Id_usuario" class="btn btn-primary" id="actualizar"><i class="fa fa-edit"></i></a>
+                                            <button onclick="eliminar('@usuario.Id_usuario')" class="btn btn-danger" id="Eliminar"><i class="fa fa-trash"></i></button>
+
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.col -->
+            </div>
+
+
+
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            Paginación
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->
+<div class="modal fade" id="mod" role="dialog">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Información</h4>
+            </div>
+            <div class="modal-body">
+                <p id="content">Desea eliminar el Usuario?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="mod-acept"> Eliminar</button><button class="btn btn-secondary" id="mod-can">Cancelar</button>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<script>
+
+    var f_id;
+
+    document.addEventListener("DOMContentLoaded", function (e) {
+
+
+
+        document.getElementById("mod-acept").addEventListener("click", function () {
+            location.replace("/Usuario/eliminar?id=" + f_id);
+            $("#mod").modal("hide");
+        })
+        document.getElementById("mod-can").addEventListener("click", function () {
+            $("#mod").modal("hide");
+        })
+
+        function limpiar_spam() {
+            var elementos = document.getElementsByClassName("sp");
+            for (i = 0; i < elementos.length ; i++) {
+                elementos.item(i).innerHTML = "";
+            }
+        }
+    })
+
+    function eliminar(id) {
+        $("#mod").modal({ backdrop: true });
+        f_id = id;
+    }
+
+
+</script>
 

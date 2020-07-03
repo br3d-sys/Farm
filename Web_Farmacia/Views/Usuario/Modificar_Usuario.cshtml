@@ -4,5 +4,231 @@
     Layout = "~/Views/Main.cshtml";
 }
 
-<h2>Modificar_Usuario</h2>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Modificar Usuario</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Modificar Usuario</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Modificar</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+
+            @model Web_Farmacia.Controllers.Info
+
+            <form method="post" enctype="multipart/form-data" id="modificar">
+
+                <div class="d-flex">
+                    <a href="@Url.Action("Consultar_Usuario", "Usuario")" class="btn btn-secondary ml-auto"><i class="fa fa-caret-left"></i> Regresar</a>
+                </div>
+
+                <div class="form-row">
+
+                    <input class="form-control" type="hidden" name="id" id="id" value="@Model.Obj_usu.Id_usuario">
+                    
+                        <div class="form-group col-sm-6">
+                            <label for="nombre">Nombre</label>
+                            <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese su Nombre" value="@Model.Obj_usu.Nombre">
+                            <span class="badge badge-warning sp" id="sp_nombre"></span>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label for="documento">Tipo de Documento</label>
+                            <select class="form-control" name="documento" id="documento" value="@Model.Obj_usu.Documento">
+                                <option value="DNI">DNI</option>
+                                <option value="RUC">RUC</option>
+                                <option value="LE">LE</option>
+                            </select>
+                            <span class="badge badge-warning sp" id="sp_documento"></span>
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label for="n_documento">Numero de Documento</label>
+                            <input class="form-control" type="text" name="n_documento" id="n_documento" placeholder="Ingrese el N°" value="@Model.Obj_usu.N_documento">
+                            <span class="badge badge-warning sp" id="sp_n_documento"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-4">
+                            <label for="direccion">Direccion</label>
+                            <input class="form-control" type="text" name="direccion" id="direccion" placeholder="Ingrese su Dirección" value="@Model.Obj_usu.Direccion"/>
+                            <span class="badge badge-warning sp" id="sp_direccion"></span>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="celular">Celular</label>
+                            <input class="form-control" type="text" name="celular" id="celular" placeholder="Ingrese su Celular" value="@Model.Obj_usu.Celular">
+                            <span class="badge badge-warning sp" id="sp_celular"></span>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="correo">Correo</label>
+                            <input class="form-control" type="text" name="correo" id="correo" placeholder="Ingrese su Correo" value="@Model.Obj_usu.Correo">
+                            <span class="badge badge-warning sp" id="sp_correo"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-sm-4">
+                            <label for="usuario">Usuario</label>
+                            <input class="form-control" type="text" name="usuario" id="usuario" placeholder="Ingrese el Usuario" value="@Model.Obj_usu.Nom_usuario">
+                            <span class="badge badge-warning sp" id="sp_usuario"></span>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="password">Contraseña</label>
+                            <input class="form-control" type="password" name="password" id="password" placeholder="Ingrese la Contraseña" value="@Model.Obj_usu.Password">
+                            <span class="badge badge-warning sp" id="sp_password"></span>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="id_cargo">Cargo</label>
+                            <select class="form-control" name="id_cargo" id="id_cargo">
+                                @foreach (var item in Model.Car)
+                                {
+                                    <option value="@item.Id_cargo">@item.Nombre</option>
+                                }
+                            </select>
+                            <span class="badge badge-warning sp" id="sp_id_cargo"></span>
+                        </div>
+
+                    </div>
+                    <div class="form-row d-flex justify-content-between">
+                        <div class="form-group col-auto">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </div>
+
+            </form>
+
+
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            Paginación
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->
+<div class="modal fade" id="mod" role="dialog">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Información</h4>
+            </div>
+            <div class="modal-body">
+                <p id="content"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="mod-acept"><i class="fa fa-caret-left"></i> Regresar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        document.getElementById("modificar").addEventListener("submit", function (e) {
+
+            var url = "@Url.Action("Modificar_Usuario", "Usuario")"/*"/Producto/Registrar_Producto"*/;
+
+            //var form = document.getElementById("registrar");
+
+            var id = document.getElementById("id").value;
+            var nombre = document.getElementById("nombre").value;
+            var documento = document.getElementById("documento").value;
+            var n_documento = document.getElementById("n_documento").value;
+            var direccion = document.getElementById("direccion").value;
+            var celular = document.getElementById("celular").value;
+            var correo = document.getElementById("correo").value;
+            var id_cargo = document.getElementById("id_cargo").value;
+            var usuario = document.getElementById("usuario").value;
+            var password = document.getElementById("password").value;
+
+            var formdata = new FormData();
+
+            //var param = "id=" + id + "&nombre=" + nombre + "&descripcion=" + descripcion;
+
+            formdata.append("id", id);
+            formdata.append("nombre", nombre);
+            formdata.append("documento", documento);
+            formdata.append("n_documento", n_documento);
+            formdata.append("direccion", direccion);
+            formdata.append("celular", celular);
+            formdata.append("correo", correo);
+            formdata.append("id_cargo", id_cargo);
+            formdata.append("usuario", usuario);
+            formdata.append("password", password);
+
+            var ajax = new XMLHttpRequest();
+
+            ajax.onreadystatechange = function () {
+                if (ajax.readyState == 4) {
+
+                    //console.log(JSON.parse(ajax.responseText));
+
+                    var response = JSON.parse(ajax.responseText);
+                    if (response.success) {
+                        console.log(response.message);
+
+                        document.getElementById("content").innerHTML = response.message;
+                        $("#mod").modal({ backdrop: true });
+                        limpiar_spam();
+                    } else {
+                        console.log(response);
+                        limpiar_spam();
+                        for (var prop in response.datos) {
+                            //console.log("propiedad " + prop + " valor " + response.datos[prop]);
+                            document.getElementById(prop).innerHTML = response.datos[prop]
+                        }
+                    }
+                }
+            }
+
+            ajax.open("POST", url, true);
+            //ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            //console.log(formdata.toString);
+            ajax.send(formdata);
+
+            e.preventDefault();
+        })
+
+        document.getElementById("mod-acept").addEventListener("click", function () {
+            $("#mod").modal("hide");
+
+            location.replace("@Url.Action("Consultar_Usuario", "Usuario")");
+        })
+
+        function limpiar_spam() {
+            var elementos = document.getElementsByClassName("sp");
+            for (i = 0; i < elementos.length ; i++) {
+                elementos.item(i).innerHTML = "";
+            }
+        }
+
+    })
+
+</script>
 
