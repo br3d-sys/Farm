@@ -15,7 +15,8 @@ IN _cantidad INT,
 IN _precio INT,
 IN _total INT)
 BEGIN
-INSERT INTO detalle_ventas(id_producto,id_ventas,cantidad,precio,total) VALUES(_id_producto,_id_ventas,_cantidad,_precio,_total);
+INSERT INTO detalle_ventas(id_producto,id_ventas,cantidad,precio,total) 
+VALUES(_id_producto,_id_ventas,_cantidad,_precio,_total);
 END$$
 DELIMITER ;
 
@@ -32,7 +33,11 @@ DELIMITER $$
 CREATE PROCEDURE `SP_A_Tabla_Producto`()
 BEGIN
 IF EXISTS (SELECT * FROM tbl_producto) THEN
- Select tbl_producto.id_producto, tbl_producto.nombre, tbl_producto.id_categoria, tbl_categoria.nombre AS 'categoria', tbl_producto.stock, tbl_producto.descripcion, tbl_producto.codigo, tbl_producto.precio, tbl_producto.imagen from tbl_producto INNER JOIN tbl_categoria ON tbl_producto.id_categoria = tbl_categoria.id_categoria where tbl_producto.disponibilidad>0;
+ Select tbl_producto.id_producto, tbl_producto.nombre, tbl_producto.id_categoria, 
+ tbl_categoria.nombre AS 'categoria', tbl_producto.stock, tbl_producto.descripcion, 
+ tbl_producto.codigo, tbl_producto.precio, tbl_producto.imagen from tbl_producto INNER JOIN 
+ tbl_categoria ON tbl_producto.id_categoria = tbl_categoria.id_categoria where 
+ tbl_producto.disponibilidad>0;
 END IF;
 END$$
 DELIMITER ;
@@ -49,7 +54,9 @@ IN _celular VARCHAR(9),
 IN _direccion VARCHAR(50),
 IN _id_cargo INT)
 BEGIN
-INSERT INTO tbl_usuario(nombre, usuario,contrasena,documento,n_documento,correo,celular,direccion,id_cargo) VALUES(_nombre, _usuario, _contrasena, _documento, _n_documento, _correo, _celular, _direccion, _id_cargo);
+INSERT INTO tbl_usuario(nombre, usuario,contrasena,documento,n_documento,
+correo,celular,direccion,id_cargo) VALUES(_nombre, _usuario, _contrasena, 
+_documento, _n_documento, _correo, _celular, _direccion, _id_cargo);
 END$$
 DELIMITER ;
 
@@ -65,7 +72,9 @@ CREATE PROCEDURE `SP_A_Tabla_Cliente`(
   IN _direccion VARCHAR(45),
   IN _tipo_cliente VARCHAR(45))
 BEGIN
-    insert into tbl_cliente(nombre,t_documento,n_documento,direccion,celular,edad,sexo,est_civil,tipo_cliente) values(_nombre,_t_documento,_n_documento,_direccion, _celular, _edad, _sexo, _est_civil, _tipo_cliente);
+    insert into tbl_cliente(nombre,t_documento,n_documento,direccion,
+	celular,edad,sexo,est_civil,tipo_cliente) values(_nombre,_t_documento,
+	_n_documento,_direccion, _celular, _edad, _sexo, _est_civil, _tipo_cliente);
     SET @nuevoId = LAST_INSERT_ID();
 	SELECT @nuevoId;
 	END$$
@@ -93,7 +102,8 @@ CREATE PROCEDURE `SP_A_Tabla_Acceso_Cliente`(
   IN _contrasena VARCHAR(45),
   IN _id_cliente INT)
 BEGIN
-INSERT INTO tbl_acceso_cliente(correo,contrasena,id_cliente)value(_correo,_contrasena,_id_cliente);
+INSERT INTO tbl_acceso_cliente(correo,contrasena,id_cliente)
+value(_correo,_contrasena,_id_cliente);
 END$$
 DELIMITER ;
 
@@ -108,8 +118,10 @@ CREATE PROCEDURE `SP_A_Tabla_Comprobantes`(
   IN _nro_com VARCHAR(10),
   IN _tipo VARCHAR(15))
 BEGIN
-INSERT INTO tbl_comprobantes(id_cliente,id_usuario,id_ventas,fecha,t_comprobante,serie_com,nro_com,tipo)
-value(_id_cliente,_id_usuario,_id_ventas,_fecha,_t_comprobante,_serie_com,_nro_com,_tipo);
+INSERT INTO tbl_comprobantes(id_cliente,id_usuario,id_ventas,
+fecha,t_comprobante,serie_com,nro_com,tipo)
+value(_id_cliente,_id_usuario,_id_ventas,_fecha,_t_comprobante,
+_serie_com,_nro_com,_tipo);
 SET @nuevoId = LAST_INSERT_ID();
 SELECT @nuevoId;
 END$$
@@ -125,7 +137,12 @@ IN _nombre VARCHAR(50),
 IN _id_categoria INT)
 BEGIN
 IF EXISTS (SELECT * FROM tbl_producto) THEN
- Select tbl_producto.id_producto, tbl_producto.nombre, tbl_producto.id_categoria, tbl_categoria.nombre AS 'categoria', tbl_producto.stock, tbl_producto.descripcion, tbl_producto.codigo, tbl_producto.precio, tbl_producto.imagen from tbl_producto INNER JOIN tbl_categoria ON tbl_producto.id_categoria = tbl_categoria.id_categoria WHERE tbl_producto.nombre LIKE CONCAT("%", _nombre, "%") and tbl_producto.id_categoria LIKE CONCAT("%", _id_categoria, "%") and tbl_producto.disponibilidad>0; 
+ Select tbl_producto.id_producto, tbl_producto.nombre, tbl_producto.id_categoria, 
+ tbl_categoria.nombre AS 'categoria', tbl_producto.stock, tbl_producto.descripcion, 
+ tbl_producto.codigo, tbl_producto.precio, tbl_producto.imagen from tbl_producto 
+ INNER JOIN tbl_categoria ON tbl_producto.id_categoria = tbl_categoria.id_categoria 
+ WHERE tbl_producto.nombre LIKE CONCAT("%", _nombre, "%") and tbl_producto.id_categoria 
+ LIKE CONCAT("%", _id_categoria, "%") and tbl_producto.disponibilidad>0; 
 END IF; 
 END$$
 DELIMITER ;
@@ -137,7 +154,11 @@ CREATE PROCEDURE `SP_C_Detalle_Ventas`(
 IN _id_ventas INT)
 BEGIN
 IF EXISTS (SELECT * FROM detalle_ventas) THEN
- SELECT detalle_ventas.id_detalleventas, detalle_ventas.id_producto, tbl_producto.nombre as 'producto', detalle_ventas.id_ventas, detalle_ventas.cantidad, detalle_ventas.precio, detalle_ventas.total FROM detalle_ventas INNER JOIN tbl_producto ON detalle_ventas.id_producto = tbl_producto.id_producto where detalle_ventas.id_ventas = _id_ventas and detalle_ventas.disponibilidad>0;
+ SELECT detalle_ventas.id_detalleventas, detalle_ventas.id_producto, 
+ tbl_producto.nombre as 'producto', detalle_ventas.id_ventas, detalle_ventas.cantidad, 
+ detalle_ventas.precio, detalle_ventas.total FROM detalle_ventas INNER JOIN 
+ tbl_producto ON detalle_ventas.id_producto = tbl_producto.id_producto where 
+ detalle_ventas.id_ventas = _id_ventas and detalle_ventas.disponibilidad>0;
 END IF;
 END$$
 DELIMITER ;
@@ -157,7 +178,8 @@ CREATE PROCEDURE `SP_C_Tabla_Categoria`(
     IN _descripcion VARCHAR(200))
 BEGIN
     
-    INSERT INTO tbl_categoria (nombre,descripcion) VALUES (_nombre,_descripcion);
+    INSERT INTO tbl_categoria (nombre,descripcion) 
+	VALUES (_nombre,_descripcion);
     
     END$$
 DELIMITER ;
@@ -166,7 +188,9 @@ DELIMITER $$
 CREATE PROCEDURE `SP_C_Tabla_Cliente`()
 BEGIN
 IF EXISTS (SELECT * FROM tbl_cliente) THEN
- SELECT id_cliente,nombre, t_documento, n_documento, direccion, celular, edad, sexo, est_civil FROM tbl_cliente where disponibilidad>0;
+ SELECT id_cliente,nombre, t_documento, n_documento, direccion, 
+ celular, edad, sexo, est_civil FROM tbl_cliente 
+ where disponibilidad>0;
 END IF;
 END$$
 DELIMITER ;
@@ -181,7 +205,9 @@ CREATE PROCEDURE `SP_C_Tabla_Producto`(
     IN _precio DOUBLE,
     IN _imagen VARCHAR(200))
 BEGIN
-    insert into tbl_producto(nombre,id_categoria,stock,descripcion,codigo,precio,imagen) values(_nombre,_id_categoria,_stock,_descripcion, _codigo, _precio, _imagen);
+    insert into tbl_producto(nombre,id_categoria,stock,
+	descripcion,codigo,precio,imagen) values(_nombre,
+	_id_categoria,_stock,_descripcion, _codigo, _precio, _imagen);
     END$$
 DELIMITER ;
 
@@ -189,7 +215,11 @@ DELIMITER $$
 CREATE PROCEDURE `SP_C_Tabla_Usuario`()
 BEGIN
 IF EXISTS (SELECT * FROM tbl_usuario) THEN
- SELECT tbl_usuario.id_usuario, tbl_usuario.nombre, tbl_usuario.usuario,tbl_usuario.documento,tbl_usuario.n_documento,tbl_usuario.correo,tbl_usuario.celular,tbl_usuario.direccion,tbl_usuario.id_cargo, tbl_cargo.nombre AS 'cargo' from tbl_usuario INNER JOIN tbl_cargo ON tbl_usuario.id_cargo = tbl_cargo.id_cargo where tbl_usuario.disponibilidad>0;
+ SELECT tbl_usuario.id_usuario, tbl_usuario.nombre, tbl_usuario.usuario,
+ tbl_usuario.documento,tbl_usuario.n_documento,tbl_usuario.correo,
+ tbl_usuario.celular,tbl_usuario.direccion,tbl_usuario.id_cargo, 
+ tbl_cargo.nombre AS 'cargo' from tbl_usuario INNER JOIN tbl_cargo 
+ ON tbl_usuario.id_cargo = tbl_cargo.id_cargo where tbl_usuario.disponibilidad>0;
 END IF;
 END$$
 DELIMITER ;
@@ -198,7 +228,10 @@ DELIMITER $$
 CREATE PROCEDURE `SP_C_Tabla_Ventas`()
 BEGIN
 IF EXISTS (SELECT * FROM tbl_ventas) THEN
- SELECT tbl_ventas.id_ventas,tbl_ventas.id_cliente,tbl_cliente.nombre AS 'cliente', tbl_ventas.fecha, tbl_ventas.total, tbl_ventas.est_entrega, tbl_ventas.est_pago, tbl_ventas.codigo FROM tbl_ventas INNER JOIN tbl_cliente ON tbl_ventas.id_cliente = tbl_cliente.id_cliente where tbl_ventas.disponibilidad>0;
+ SELECT tbl_ventas.id_ventas,tbl_ventas.id_cliente,tbl_cliente.nombre AS 'cliente',
+ tbl_ventas.fecha, tbl_ventas.total, tbl_ventas.est_entrega, tbl_ventas.est_pago, 
+ tbl_ventas.codigo FROM tbl_ventas INNER JOIN tbl_cliente ON 
+ tbl_ventas.id_cliente = tbl_cliente.id_cliente where tbl_ventas.disponibilidad>0;
 END IF;
 END$$
 DELIMITER ;
@@ -207,11 +240,15 @@ DELIMITER $$
 CREATE PROCEDURE `SP_C_Tabla_Comprobantes`()
 BEGIN
 IF EXISTS (SELECT * FROM tbl_comprobantes) THEN
-SELECT tbl_comprobantes.id_comprobante,tbl_comprobantes.id_cliente,tbl_cliente.nombre AS 'cliente',tbl_cliente.t_documento,tbl_cliente.n_documento,tbl_cliente.direccion,tbl_comprobantes.id_usuario, 
-tbl_usuario.nombre AS 'usuario', tbl_comprobantes.id_ventas,tbl_ventas.codigo AS 'ventas', tbl_comprobantes.fecha, 
-tbl_comprobantes.t_comprobante, tbl_comprobantes.serie_com, tbl_comprobantes.nro_com, tbl_comprobantes.tipo FROM tbl_comprobantes 
-INNER JOIN tbl_cliente ON tbl_comprobantes.id_cliente = tbl_cliente.id_cliente INNER JOIN tbl_usuario ON 
-tbl_comprobantes.id_usuario = tbl_usuario.id_usuario INNER JOIN tbl_ventas ON tbl_ventas.id_ventas = tbl_comprobantes.id_ventas 
+SELECT tbl_comprobantes.id_comprobante,tbl_comprobantes.id_cliente,
+tbl_cliente.nombre AS 'cliente',tbl_cliente.t_documento,tbl_cliente.n_documento,
+tbl_cliente.direccion,tbl_comprobantes.id_usuario, tbl_usuario.nombre AS 'usuario', 
+tbl_comprobantes.id_ventas,tbl_ventas.codigo AS 'ventas', tbl_comprobantes.fecha, 
+tbl_comprobantes.t_comprobante, tbl_comprobantes.serie_com, tbl_comprobantes.nro_com, 
+tbl_comprobantes.tipo FROM tbl_comprobantes INNER JOIN tbl_cliente ON 
+tbl_comprobantes.id_cliente = tbl_cliente.id_cliente INNER JOIN tbl_usuario ON 
+tbl_comprobantes.id_usuario = tbl_usuario.id_usuario INNER JOIN tbl_ventas ON 
+tbl_ventas.id_ventas = tbl_comprobantes.id_ventas 
 where tbl_comprobantes.disponibilidad>0;
 END IF;
 END$$
@@ -225,7 +262,8 @@ DELIMITER $$
 CREATE PROCEDURE `SP_E_Tabla_Comprobantes`(
 IN _id_comprobante INT)
 BEGIN
-UPDATE tbl_comprobantes SET disponibilidad = 0 WHERE id_comprobante = _id_comprobante;
+UPDATE tbl_comprobantes SET disponibilidad = 0 WHERE 
+id_comprobante = _id_comprobante;
 END$$
 DELIMITER ;
 
@@ -233,7 +271,8 @@ DELIMITER $$
 CREATE PROCEDURE `SP_E_Tabla_Cargo`(
     IN _id_cargo INT)
 BEGIN
-UPDATE tbl_cargo SET disponibilidad = 0 WHERE id_cargo = _id_cargo;
+UPDATE tbl_cargo SET disponibilidad = 0 WHERE 
+id_cargo = _id_cargo;
 END$$
 DELIMITER ;
 
@@ -241,7 +280,8 @@ DELIMITER $$
 CREATE PROCEDURE `SP_E_Tabla_Categoria`(
     IN _id_categoria INT)
 BEGIN
-UPDATE tbl_categoria SET disponibilidad = 0 where id_categoria = _id_categoria;
+UPDATE tbl_categoria SET disponibilidad = 0 where 
+id_categoria = _id_categoria;
     END$$
 DELIMITER ;
 
@@ -256,7 +296,8 @@ DELIMITER $$
 CREATE PROCEDURE `SP_E_Tabla_Producto`(
     IN _id_producto INT)
 BEGIN
-    UPDATE tbl_producto SET disponibilidad = 0 where id_producto = _id_producto;
+    UPDATE tbl_producto SET disponibilidad = 0 where 
+	id_producto = _id_producto;
     END$$
 DELIMITER ;
 
@@ -264,7 +305,8 @@ DELIMITER $$
 CREATE PROCEDURE `SP_E_Tabla_Usuario`(
     IN _id_usuario INT)
 BEGIN
-    UPDATE tbl_usuario SET disponibilidad = 0 WHERE id_usuario = _id_usuario;
+    UPDATE tbl_usuario SET disponibilidad = 0 WHERE 
+	id_usuario = _id_usuario;
     END$$
 DELIMITER ;
 
@@ -272,7 +314,8 @@ DELIMITER $$
 CREATE PROCEDURE `SP_E_Tabla_Ventas`(
 IN _id_ventas INT)
 BEGIN
-UPDATE tbl_ventas SET disponibilidad=0 WHERE id_ventas = _id_ventas;
+UPDATE tbl_ventas SET disponibilidad=0 WHERE 
+id_ventas = _id_ventas;
 END$$
 DELIMITER ;
 
@@ -280,7 +323,8 @@ DELIMITER $$
 CREATE PROCEDURE `SP_E_Detalle_Ventas`(
 IN _id_ventas INT)
 BEGIN
-UPDATE detalle_ventas SET disponibilidad=0 WHERE id_ventas = _id_ventas;
+UPDATE detalle_ventas SET disponibilidad=0 WHERE 
+id_ventas = _id_ventas;
 END$$
 DELIMITER ;
 
@@ -296,7 +340,9 @@ IN _cantidad INT,
 IN _precio INT,
 IN _total INT)
 BEGIN
-UPDATE detalle_ventas SET id_producto = _id_producto, id_ventas = _id_ventas, cantidad = _cantidad, precio = _precio, total = _total WHERE id_detalleventas = _id_detalleventas;
+UPDATE detalle_ventas SET id_producto = _id_producto, 
+id_ventas = _id_ventas, cantidad = _cantidad, precio = _precio, 
+total = _total WHERE id_detalleventas = _id_detalleventas;
 END$$
 DELIMITER ;
 
@@ -307,7 +353,8 @@ IN _nombre VARCHAR(45),
 IN _detalle VARCHAR(70)
 )
 BEGIN
-UPDATE tbl_cargo SET nombre=_nombre, detalle=_detalle WHERE id_cargo = _id_cargo;
+UPDATE tbl_cargo SET nombre=_nombre, detalle=_detalle 
+WHERE id_cargo = _id_cargo;
 END$$
 DELIMITER ;
 
@@ -318,7 +365,8 @@ CREATE PROCEDURE `SP_M_Tabla_Categoria`(
     IN _id_categoria INT
 )
 BEGIN
-update tbl_categoria set nombre=_nombre,descripcion=_descripcion where id_categoria =_id_categoria;
+update tbl_categoria set nombre=_nombre,descripcion=_descripcion 
+where id_categoria =_id_categoria;
 END$$
 DELIMITER ;
 
@@ -336,7 +384,10 @@ CREATE PROCEDURE `SP_M_Tabla_Cliente`(
         IN _id_cliente INT)
 BEGIN
         
-        update tbl_cliente set nombre=_nombre,t_documento=_t_documento,n_documento=_n_documento,direccion=_direccion,celular=_celular,edad=_edad,sexo=_sexo,est_civil=_est_civil,tipo_cliente=_tipo_cliente where id_cliente =_id_cliente;
+        update tbl_cliente set nombre=_nombre,t_documento=_t_documento,
+		n_documento=_n_documento,direccion=_direccion,celular=_celular,
+		edad=_edad,sexo=_sexo,est_civil=_est_civil,
+		tipo_cliente=_tipo_cliente where id_cliente =_id_cliente;
    
         END$$
 DELIMITER ;
@@ -354,9 +405,13 @@ CREATE PROCEDURE `SP_M_Tabla_Producto`(
 BEGIN
         
         IF _imagen IS NULL OR _imagen = '' THEN
-        update tbl_producto set nombre=_nombre,id_categoria = _id_categoria,stock=_stock,descripcion=_descripcion,codigo=_codigo,precio=_precio where id_producto =_id_producto;
+        update tbl_producto set nombre=_nombre,id_categoria = _id_categoria,
+		stock=_stock,descripcion=_descripcion,codigo=_codigo,precio=_precio 
+		where id_producto =_id_producto;
         ELSE
-        update tbl_producto set nombre=_nombre,id_categoria = _id_categoria,stock=_stock,descripcion=_descripcion,codigo=_codigo,precio=_precio, imagen = _imagen where id_producto =_id_producto;
+        update tbl_producto set nombre=_nombre,id_categoria = _id_categoria,
+		stock=_stock,descripcion=_descripcion,codigo=_codigo,precio=_precio,
+		imagen = _imagen where id_producto =_id_producto;
         END IF;
         END$$
 DELIMITER ;
@@ -374,7 +429,9 @@ IN _celular VARCHAR(9),
 IN _direccion VARCHAR(50),
 IN _id_cargo INT)
 BEGIN
-UPDATE tbl_usuario SET nombre=_nombre, usuario=_usuario,contrasena=_contrasena,documento=_documento,n_documento=_n_documento,correo=_correo,celular=_celular,direccion=_direccion,id_cargo=_id_cargo WHERE id_usuario = _id_usuario;
+UPDATE tbl_usuario SET nombre=_nombre, usuario=_usuario,contrasena=_contrasena,
+documento=_documento,n_documento=_n_documento,correo=_correo,celular=_celular,
+direccion=_direccion,id_cargo=_id_cargo WHERE id_usuario = _id_usuario;
 END$$
 DELIMITER ;
 
@@ -388,7 +445,9 @@ CREATE PROCEDURE `SP_M_Tabla_Ventas`(
     IN _est_pago VARCHAR(50),
     IN _codigo VARCHAR(15))
 BEGIN
-UPDATE tbl_ventas SET id_cliente=_id_cliente,fecha=_fecha,total=_total,est_entrega=_est_entrega,est_pago =_est_pago,codigo=_codigo WHERE id_ventas = _id_ventas;
+UPDATE tbl_ventas SET id_cliente=_id_cliente,fecha=_fecha,total=_total,
+est_entrega=_est_entrega,est_pago =_est_pago,codigo=_codigo 
+WHERE id_ventas = _id_ventas;
 END$$
 DELIMITER ;
 
@@ -399,7 +458,8 @@ CREATE PROCEDURE `SP_M_Tabla_Acceso_Cliente`(
   IN _id_cliente INT,
   IN _id_acceso_cliente INT)
 BEGIN
-UPDATE tbl_acceso_cliente SET correo = _correo, contrasena = _contrasena, id_cliente = _id_cliente WHERE id_acceso_cliente = _id_acceso_cliente;
+UPDATE tbl_acceso_cliente SET correo = _correo, contrasena = _contrasena, 
+id_cliente = _id_cliente WHERE id_acceso_cliente = _id_acceso_cliente;
 END$$
 DELIMITER ;
 
@@ -415,8 +475,10 @@ CREATE PROCEDURE `SP_M_Tabla_Comprobantes`(
   IN _tipo VARCHAR(15),
   IN _id_comprobante INT)
 BEGIN
-UPDATE tbl_comprobantes SET id_cliente=_id_cliente, id_usuario=_id_usuario, id_ventas=_id_ventas, fecha=_fecha, t_comprobante=_t_comprobante,
-serie_com=_serie_com, nro_com=_nro_com, tipo=_tipo WHERE id_comprobante=_id_comprobante;
+UPDATE tbl_comprobantes SET id_cliente=_id_cliente, id_usuario=_id_usuario, 
+id_ventas=_id_ventas, fecha=_fecha, t_comprobante=_t_comprobante,
+serie_com=_serie_com, nro_com=_nro_com, tipo=_tipo 
+WHERE id_comprobante=_id_comprobante;
 END$$
 DELIMITER ;
 
@@ -438,7 +500,8 @@ CREATE PROCEDURE `SP_O_Tabla_Categoria`(
     IN _id_categoria INT)
 BEGIN
 IF EXISTS (SELECT * FROM tbl_categoria) THEN
- SELECT * FROM tbl_categoria WHERE id_categoria = _id_categoria and disponibilidad > 0;
+ SELECT * FROM tbl_categoria WHERE id_categoria = _id_categoria 
+ and disponibilidad > 0;
 END IF;
     END$$
 DELIMITER ;
@@ -448,7 +511,8 @@ CREATE PROCEDURE `SP_O_Tabla_Cliente`(
     IN _id_cliente INT)
 BEGIN
 IF EXISTS (SELECT * FROM tbl_cliente) THEN
- SELECT * FROM tbl_cliente where id_cliente = _id_cliente and disponibilidad > 0;
+ SELECT * FROM tbl_cliente where id_cliente = _id_cliente 
+ and disponibilidad > 0;
 END IF;
 END$$
 DELIMITER ;
@@ -458,7 +522,8 @@ CREATE PROCEDURE `SP_O_Tabla_Producto`(
     IN _id_producto INT)
 BEGIN
 IF EXISTS (SELECT * FROM tbl_producto) THEN
- SELECT * FROM tbl_producto WHERE id_producto = _id_producto and disponibilidad > 0;
+ SELECT * FROM tbl_producto WHERE id_producto = _id_producto 
+ and disponibilidad > 0;
 END IF;
     END$$
 DELIMITER ;
@@ -467,7 +532,8 @@ DELIMITER $$
 CREATE PROCEDURE `SP_O_Tabla_Usuario`(IN _id_usuario INT)
 BEGIN
 IF EXISTS (SELECT * FROM tbl_usuario) THEN
- SELECT * FROM tbl_usuario WHERE id_usuario=_id_usuario and disponibilidad > 0;
+ SELECT * FROM tbl_usuario WHERE id_usuario=_id_usuario 
+ and disponibilidad > 0;
 END IF;
 END$$
 DELIMITER ;
@@ -477,11 +543,17 @@ CREATE PROCEDURE `SP_O_Tabla_Comprobantes`(IN _id_comprobante INT)
 BEGIN
 IF EXISTS (SELECT * FROM tbl_comprobantes) THEN
 
-SELECT tbl_comprobantes.id_comprobante,tbl_comprobantes.id_cliente,tbl_cliente.nombre AS 'cliente',tbl_cliente.t_documento,tbl_cliente.n_documento,
-tbl_cliente.direccion,tbl_comprobantes.id_usuario, tbl_usuario.nombre AS 'usuario', tbl_comprobantes.id_ventas,tbl_ventas.codigo AS 'ventas', 
-tbl_comprobantes.fecha, tbl_comprobantes.t_comprobante, tbl_comprobantes.serie_com, tbl_comprobantes.nro_com, tbl_comprobantes.tipo, 
-tbl_comprobantes.disponibilidad FROM tbl_comprobantes INNER JOIN tbl_cliente ON tbl_comprobantes.id_cliente = tbl_cliente.id_cliente 
-INNER JOIN tbl_usuario ON tbl_comprobantes.id_usuario = tbl_usuario.id_usuario INNER JOIN tbl_ventas ON tbl_ventas.id_ventas = tbl_comprobantes.id_ventas WHERE 
+SELECT tbl_comprobantes.id_comprobante,tbl_comprobantes.id_cliente,
+tbl_cliente.nombre AS 'cliente',tbl_cliente.t_documento,tbl_cliente.n_documento,
+tbl_cliente.direccion,tbl_comprobantes.id_usuario, 
+tbl_usuario.nombre AS 'usuario', tbl_comprobantes.id_ventas,
+tbl_ventas.codigo AS 'ventas', tbl_comprobantes.fecha, 
+tbl_comprobantes.t_comprobante, tbl_comprobantes.serie_com, 
+tbl_comprobantes.nro_com, tbl_comprobantes.tipo, 
+tbl_comprobantes.disponibilidad FROM tbl_comprobantes INNER JOIN 
+tbl_cliente ON tbl_comprobantes.id_cliente = tbl_cliente.id_cliente 
+INNER JOIN tbl_usuario ON tbl_comprobantes.id_usuario = tbl_usuario.id_usuario 
+INNER JOIN tbl_ventas ON tbl_ventas.id_ventas = tbl_comprobantes.id_ventas WHERE 
 tbl_comprobantes.id_comprobante=_id_comprobante and tbl_comprobantes.disponibilidad>0;
 
 END IF;
@@ -492,7 +564,8 @@ DELIMITER $$
 CREATE PROCEDURE `SP_O_Tabla_Acceso_Cliente`(IN _id_cliente INT)
 BEGIN
 IF EXISTS (SELECT * FROM tbl_acceso_cliente) THEN
- SELECT * FROM tbl_acceso_cliente WHERE id_cliente=_id_cliente and disponibilidad > 0;
+ SELECT * FROM tbl_acceso_cliente WHERE id_cliente=_id_cliente 
+ and disponibilidad > 0;
 END IF;
 END$$
 DELIMITER ;
@@ -501,7 +574,8 @@ DELIMITER $$
 CREATE PROCEDURE `SP_O_Detalle_Ventas`(IN _id_ventas INT)
 BEGIN
 IF EXISTS (SELECT * FROM tbl_detalle_ventas) THEN
- SELECT * FROM tbl_detalle_ventas WHERE id_ventas=_id_ventas and disponibilidad > 0;
+ SELECT * FROM tbl_detalle_ventas WHERE id_ventas=_id_ventas 
+ and disponibilidad > 0;
 END IF;
 END$$
 DELIMITER ;
@@ -510,16 +584,19 @@ DELIMITER $$
 CREATE PROCEDURE `SP_O_Tabla_Ventas`(IN _id_ventas INT)
 BEGIN
 IF EXISTS (SELECT * FROM tbl_ventas) THEN
- SELECT * FROM tbl_ventas WHERE id_ventas=_id_ventas and disponibilidad > 0;
+ SELECT * FROM tbl_ventas WHERE id_ventas=_id_ventas 
+ and disponibilidad > 0;
 END IF;
 END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE `SP_V_Tabla_Usuario`(IN _usuario VARCHAR(45),IN _contrasena VARCHAR(45))
+CREATE PROCEDURE `SP_V_Tabla_Usuario`(IN _usuario VARCHAR(45),
+IN _contrasena VARCHAR(45))
 BEGIN
 IF EXISTS (SELECT * FROM tbl_usuario) THEN
- SELECT * FROM tbl_usuario WHERE usuario=_usuario and contrasena = _contrasena and disponibilidad > 0;
+ SELECT * FROM tbl_usuario WHERE usuario=_usuario and 
+ contrasena = _contrasena and disponibilidad > 0;
 END IF;
 END$$
 DELIMITER ;
