@@ -1,0 +1,167 @@
+﻿
+@{
+    ViewBag.Title = "Modificar_Cargo";
+    Layout = "~/Views/Main.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Modificar Cargo</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Modificar Cargo</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Modificar</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+
+            @model Web_Farmacia.Controllers.Info
+
+
+
+            <form method="post" enctype="multipart/form-data" id="modificar">
+                <div class="d-flex">
+                    <a href="@Url.Action("Consultar_Cargo", "Cargo")" class="btn btn-secondary ml-auto"><i class="fa fa-caret-left"></i> Regresar</a>
+                </div>
+
+                <div class="form-row">
+
+                    <input class="form-control" type="hidden" name="id" id="id" value="@Model.Obj_car.Id_cargo">
+
+                    <div class="form-group col-sm-6">
+                        <label for="nombre">Nombre</label>
+                        <input class="form-control" type="text" name="nombre" id="nombre" placeholder="Ingrese su Nombre" value="@Model.Obj_car.Nombre">
+                        <span class="badge badge-warning sp" id="sp_nombre"></span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label for="detalle">Detalle</label>
+                        <input class="form-control" type="text" name="detalle" id="detalle" placeholder="Ingrese el Detalle" value="@Model.Obj_car.Detalle">
+                        <span class="badge badge-warning sp" id="sp_detalle"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group col-auto">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+
+
+
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            Paginación
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+</section>
+<!-- /.content -->
+
+<div class="modal fade" id="mod" role="dialog">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Información</h4>
+            </div>
+            <div class="modal-body">
+                <p id="content"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="mod-acept"><i class="fa fa-caret-left"></i> Regresar</button>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function (e) {
+
+        document.getElementById("modificar").addEventListener("submit", function (e) {
+
+            var url = "@Url.Action("Modificar_Cargo", "Cargo")"/*"/Producto/Registrar_Producto"*/;
+
+            //var form = document.getElementById("registrar");
+            var id = document.getElementById("id").value;
+            var nombre = document.getElementById("nombre").value;
+            var detalle = document.getElementById("detalle").value;
+            //var formdata = new FormData();
+
+            var param = "id=" + id + "&nombre=" + nombre + "&detalle=" + detalle;
+            var ajax = new XMLHttpRequest();
+
+            ajax.onreadystatechange = function () {
+                if (ajax.readyState == 4) {
+
+                    //console.log(JSON.parse(ajax.responseText));
+
+                    var response = JSON.parse(ajax.responseText);
+                    if (response.success) {
+                        console.log(response.message);
+
+                        document.getElementById("content").innerHTML = response.message;
+                        $("#mod").modal({ backdrop: true });
+                        limpiar_spam();
+                    } else {
+                        console.log(response);
+                        limpiar_spam();
+                        for (var prop in response.datos) {
+                            //console.log("propiedad " + prop + " valor " + response.datos[prop]);
+                            document.getElementById(prop).innerHTML = response.datos[prop]
+                        }
+                    }
+                }
+            }
+
+            ajax.open("POST", url, true);
+            ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            //console.log(formdata.toString);
+            ajax.send(param);
+
+            e.preventDefault();
+        })
+
+        document.getElementById("mod-acept").addEventListener("click", function () {
+            $("#mod").modal("hide");
+
+            location.replace("@Url.Action("Consultar_Cargo", "Cargo")");
+        })
+
+        function limpiar_spam() {
+            var elementos = document.getElementsByClassName("sp");
+            for (i = 0; i < elementos.length ; i++) {
+                elementos.item(i).innerHTML = "";
+            }
+        }
+    })
+
+
+</script>
+
